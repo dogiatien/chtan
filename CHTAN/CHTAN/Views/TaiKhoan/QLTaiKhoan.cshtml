@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "QLTaiKhoan";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>QLTaiKhoan</h2>
+<body>
+    @*<form action="~/TaiKhoan/Sort" method="get">
+            <input type="radio" name="searchBy" value="all" checked /> Hiện tất cả
+            <input type="radio" name="searchBy" value="nv" /> Chỉ hiện nhân viên
+            <input type="radio" name="searchBy" value="kh" /> Chỉ hiện khách hàng
+            <input type="submit" />
+        </form>*@
+    <form action="@Url.Action("QLTaiKhoan")" method="get">
+        <label for="categorySelect">Sắp xếp theo loại:</label>
+        <select id="categorySelect" name="category">
+            <option value="">Tất cả</option>
+            @foreach (var category in ViewBag.list)
+            {
+                <option value="@category[5]">
+                    @if (@category[5] == "1")
+                    {
+                        <p>Admin</p>
+                    }
+                    else if (@category[5] == "2")
+                    {
+                        <p>Nhân viên</p>
+                    }
+                    else if (@category[5] == "3")
+                    {
+                        <p>Khách Hàng </p>
+                    }
+                </option>
+            }
+        </select>
+        <input type="submit" value="Sắp xếp" />
+    </form>
+    <table class="custom-table">
+        <tr class="table-header">
+            <th>Id</th>
+            <th>Tên Đăng Nhập</th>
+            <th>Mật Khẩu</th>
+            <th>Tên tài khoản</th>
+            <th>Số điện thoại</th>
+            <th>Loại tài khoản</th>
+            <th>Thao Tác</th>
+        </tr>
+        @foreach (var a in ViewBag.list)
+        {
+            <tr>
+                <td>@a[0]</td>
+                <td>@a[1]</td>
+                <td>@a[2]</td>
+                <td>@a[3]</td>
+                <td>@a[4]</td>
+                <td>
+                    @if (@a[5] == "1")
+                    {
+                        <p>Admin</p>
+                    }
+                    else if (@a[5] == "2")
+                    {
+                        <p>Nhân viên</p>
+                    }
+                    else if (@a[5] == "3")
+                    {
+                        <p>Khách Hàng </p>
+                    }
+                </td>
+                <td class="table-actions">
+                    <a href="/TaiKhoan/XoaTaiKhoan?id=@a[0]" class="delete-button">Xóa</a>
+                    <a href="/TaiKhoan/ChiTietTK?id=@a[0]" class="edit-button">Sửa</a>
+                </td>
+            </tr>
+        }
+    </table>
+
+    <form action="~/TaiKhoan/ThemTaiKhoan" method="post" class="add-form">
+        Tên Đăng Nhập:<input type="text" name="tendn" /><br />
+        Mật Khẩu:<input type="text" name="matkhau" /><br />
+        Tên tài khoản:<input type="text" name="tentk" /><br />
+        Số điện thoại:<input type="text" name="sdt" /><br />
+        Loại tài khoản:
+        <select name="loaitk">
+            @foreach (var b in ViewBag.list)
+            {
+                <option value="@b[5]">
+                    @if (@b[5] == "1")
+                    {
+                        <p>Admin</p>
+                    }
+                    else if (@b[5] == "2")
+                    {
+                        <p>Nhân viên</p>
+                    }
+                    else if (@b[5] == "3")
+                    {
+                        <p>Khách Hàng</p>
+                    }
+                </option>
+            }
+        </select>
+        <input type="submit" value="Thêm tài khoản" />
+    </form>
+</body>

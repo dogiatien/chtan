@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Quản lý cửa hàng thức ăn nhanh</title>
+    <link rel="stylesheet" type="text/css" href="~/Content/css/admincss.css">
+</head>
+<body>
+    <header>
+        <h1>Admin - Quản lý cửa hàng thức ăn nhanh</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="/Home/Index">Trang chủ</a></li>
+        </ul>
+    </nav>
+    <main>
+        <aside>
+            <ul>
+                <li><a href="/NguyenLieu/QLNguyenLieu" class="button">Quản lý nguyên liệu</a></li>
+                <li><a href="/TaiKhoan/QLTaiKhoan" class="button">Quản lý tài khoản</a></li>
+                <li><a href="/MonAn/QLMonAn" class="button">Quản lý món ăn</a></li>
+                <li><a href="/Loai/QLLoai" class="button">Quản lý loại</a></li>
+            </ul>
+        </aside>
+        <section>
+            @RenderBody() <!-- Nội dung chính của trang web sẽ được hiển thị ở đây -->
+        </section>
+    </main>
+    <footer>
+        <p>Bản quyền &copy; 2023 Cửa hàng thức ăn nhanh</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,125 @@
+﻿@using CHTAN.Models;
+
+@{
+    ViewBag.Title = "QLMonAn";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>QLMonAn</h2>
+<body>
+    <div class="category-container">
+        <form action="@Url.Action("QLMonAn")" method="get">
+            <label for="categorySelect">Danh mục món ăn:</label>
+            <select id="categorySelect" name="category" onchange="filterProducts()">
+                <option value="">Tất cả</option>
+                @foreach (var category in ViewBag.loai)
+                {
+                    <option value="@category[0]">@category[1]</option>
+                }
+            </select>
+            <input type="submit" value="Sắp xếp" />
+        </form>
+    </div>
+    <table class="custom-table" >
+        <tr class="table-header">
+            <td>Id</td>
+            <td>Tên Món Ăn</td>
+            <td>Mô tả</td>
+            <td>Đơn giá</td>
+            <td>Hình ảnh</td>
+            <td>Loại</td>
+            <td>Nguyên liệu</td>
+            <td>Thao tác</td>
+        </tr>
+        @foreach (var a in ViewBag.list)
+        {
+            <tr class="product-item" data-category="@a[5]" >
+                <td >@a[0]</td>
+                <td>@a[1]</td>
+                <td>@a[2]</td>
+                <td>@a[3]</td>
+                <td><img src="~/Content/Hinh/@a[4]" style="height:100px; width:100px" /></td>
+                <td>
+                    @{
+                        var idloai = (string)a[5];
+                        var tenLoai = string.Empty;
+                        foreach (var Loai in ViewBag.loai)
+                        {
+                            if ((string)Loai[0] == idloai)
+                            {
+                                tenLoai = (string)Loai[1];
+                                break;
+                            }
+                        }
+                    }
+                    @tenLoai
+                </td>
+                <td>
+                    @{
+                        var idnl = (string)a[6];
+                        var tennl = string.Empty;
+                        foreach (var nl in ViewBag.listnl)
+                        {
+                            if ((string)nl[0] == idnl)
+                            {
+                                tennl = (string)nl[1];
+                                break;
+                            }
+                        }
+                    }
+                    @tennl
+                </td>
+                <td class="table-actions">
+                    <a href="/MonAn/XoaMA?id=@a[0]">Xóa</a>
+                    <a href="/MonAN/CTMA?id=@a[0]">Sửa</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <form action="~/MonAn/ThemMA" method="post" enctype="multipart/form-data" class="add-form">
+        Tên Món Ăn:<input type="text" name="tenma" /> <br />
+        Mô tả :<input type="text" name="mt" /> <br />
+
+
+        Đơn giá :<input type="text" name="dongia" /> <br />
+
+
+        Hình Ảnh  :<input type="file" name="ha" /> <br />
+        Loại  :
+        <select name="loai">
+            @foreach (var b in ViewBag.loai)
+            {
+                <option value="@b[0]">@b[1]</option>
+            }
+        </select><br />
+        Nguyên Liệu :<select name="nl">
+            @foreach (var b in ViewBag.listnl)
+            {
+                <option value="@b[0]">@b[1]</option>
+            }
+        </select><br />
+        <input type="submit" value="Thêm món ăn" />
+    </form>
+    <script>
+        function filterProducts() {
+            var categorySelect = document.getElementById("categorySelect");
+            var selectedCategory = categorySelect.value;
+
+            var productItems = document.getElementsByClassName("product-item");
+
+            for (var i = 0; i < productItems.length; i++) {
+                var productItem = productItems[i];
+                var category = productItem.getAttribute("data-category");
+
+                if (selectedCategory === "" || category === selectedCategory) {
+                    productItem.style.display = "table-row"; // Hiển thị hàng
+                    productItem.classList.add("custom-table"); // Thêm lớp "custom-table"
+                } else {
+                    productItem.style.display = "none"; // Ẩn hàng
+                    productItem.classList.remove("custom-table"); // Xóa lớp "custom-table"
+                }
+            }
+        }
+    </script>
+</body>

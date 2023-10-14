@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "QLNguyenLieu";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>QLNguyenLieu</h2>
+<body>
+    <table class="custom-table">
+        <tr class="table-header">
+            <td>Id</td>
+            <td>Nguyên liệu</td>
+            <td>Số Lượng</td>
+            <td>Đơn giá</td>
+            <td>Thao Tác</td>
+        </tr>
+        @foreach (var a in ViewBag.list)
+        {
+            <tr>
+                <td>@a[0]</td>
+                <td>@a[1]</td>
+                <td>@a[2]</td>
+                <td>@a[3]</td>
+                <td class="table-actions">
+                    <a href="/NguyenLieu/XoaNguyenLieu?id=@a[0]">Xóa</a>
+                    <a href="/NguyenLieu/ChiTietNguyenLieu?id=@a[0]">Sửa</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <form action="~/NguyenLieu/ThemNguyenLieu" method="post" class="add-form">
+        Tên Nguyên LIệu:<input type="text" name="tennl" /><br />
+        Số lượng :<input type="text" name="soluong" /><br />
+        Đơn giá :<input type="text" name="dongia" /><br />
+        <input type="submit" value="Thêm nguyên liệu" />
+    </form>
+</body>   

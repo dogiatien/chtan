@@ -1,0 +1,209 @@
+﻿.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+
+}
+body {
+    background-color: #F5F5F5 ;
+    margin: 0 auto;
+}
+nav {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+    nav ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        nav ul li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+            nav ul li a {
+                color: #fff;
+                text-decoration: none;
+                padding: 5px;
+            }
+
+/*------------------------------------------*/
+/* CSS cho phần select */
+#categorySelect {
+    padding: 5px;
+    font-size: 16px;
+    border-radius: 5px;
+}
+
+/* CSS cho phần button */
+input[type="submit"] {
+    padding: 5px 10px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* CSS cho phần product-container */
+/*.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    background-color:white;
+}*/
+.container {
+    display: block;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+}
+
+.category-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px; /* Tùy chỉnh khoảng cách với phần product-container */
+}
+
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+}
+
+
+/* CSS cho phần product-item */
+.product-item {
+    width: 200px;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    .product-item .product-image {
+        width: 100%;
+        height: auto;
+        border-radius: 5px;
+    }
+
+    .product-item .product-title {
+        margin-top: 10px;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .product-item .product-description {
+        margin-top: 5px;
+        font-size: 14px;
+    }
+
+    .product-item .product-price {
+        margin-top: 5px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #4CAF50;
+    }
+/*-----------------------------------------------*/
+.banner-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.banner-slides {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    animation: slide 10s infinite;
+}
+
+.banner-slide {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+}
+
+    .banner-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+
+    20% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-100%);
+    }
+
+    45% {
+        transform: translateX(-100%);
+    }
+
+    50% {
+        transform: translateX(-200%);
+    }
+
+    70% {
+        transform: translateX(-200%);
+    }
+
+    75% {
+        transform: translateX(-300%);
+    }
+
+    95% {
+        transform: translateX(-300%);
+    }
+
+    100% {
+        transform: translateX(0);
+    }
+}
+/*---------------------------------------*/
+footer {
+    background-color: #333;
+    padding: 20px;
+    color: white;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 20px;
+    color: white;
+}
+
+.contact-info, .social-media {
+    flex-basis: 50%;
+}
+
+    .social-media ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .social-media ul li {
+            display: inline;
+            margin-right: 10px;
+        }
+
+            .social-media ul li:last-child {
+                margin-right: 0;
+            }

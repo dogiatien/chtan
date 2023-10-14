@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "ChiTietNguyenLieu";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>ChiTietNguyenLieu</h2>
+<form action="~/NguyenLieu/UpdateNL" method="post" enctype="multipart/form-data" class="add-form">
+    Mã Nguyên Liệu :<input type="text" name="id" value="@ViewBag.list[0][0]" /><br />
+    Tên Nguyên Liệu:<input type="text" name="tennl" value="@ViewBag.list[0][1]" /><br />
+    Số lượng :<input type="text" name="soluong" value="@ViewBag.list[0][2]" /><br />
+    Đơn giá :<input type="text" name="dongia" value="@ViewBag.list[0][3]" /><br />
+    <input type="submit" value="Sửa Nguyên Liệu" />
+</form>

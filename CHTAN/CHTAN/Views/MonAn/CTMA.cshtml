@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "CTMA";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>CTMA</h2>
+<form action="~/MonAn/UpdateMA" method="post" enctype="multipart/form-data" class="add-form">
+    Id Món Ăn:<input type="text" name="id" value="@ViewBag.list[0][0]" /><br />
+    Tên Món Ăn:<input type="text" name="tenma" value="@ViewBag.list[0][1]" /><br />
+    Mô tả :<input type="text" name="mt" value="@ViewBag.list[0][2]" /><br />
+    Đơn giá :<input type="text" name="dongia" value="@ViewBag.list[0][3]" /><br />
+    Hình Ảnh  :<input type="text" name="ha" value="@ViewBag.list[0][4]" /><br />
+    Loại  :
+    <select name="loai">
+        @foreach (var b in ViewBag.loai)
+        {
+            if (b[0] == ViewBag.list[0][5])
+            {
+                <option value="@b[0]" selected>@b[1]</option>
+            }
+            else
+            {
+                <option value="@b[0]">@b[1]</option>
+            }
+
+        }
+    </select>
+    <br />
+    Nguyên Liệu :
+    <select name="nl">
+        @foreach (var b in ViewBag.listnl)
+        {
+            if (b[0] == ViewBag.list[0][6])
+            {
+                <option value="@b[0]" selected>@b[1]</option>
+            }
+            else
+            {
+                <option value="@b[0]">@b[1]</option>
+            }
+
+        }
+    </select>
+    <input type="submit" value="Sửa món ăn" />
+</form>

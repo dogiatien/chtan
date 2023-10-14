@@ -1,0 +1,27 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/css/trangchucss.css" />
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#">Trang chủ</a></li>
+                <li><a href="#">Thực đơn</a></li>
+                <li><a href="#">Đặt hàng</a></li>
+                <li><a href="#">Liên hệ</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            @RenderBody()
+        </main>
+
+        <footer>
+            <p>Bản quyền &copy; 2023 - Web bán thức ăn nhanh</p>
+        </footer>
+    </div>
+</body>
+</html>
