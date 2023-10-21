@@ -164,6 +164,7 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\css\admincss.css" />
     <Content Include="Content\css\editcss.css" />
+    <Content Include="Content\Hinh\background.jpg" />
     <Content Include="Content\Hinh\banhtrung.jpg" />
     <Content Include="Content\Hinh\cocacola.jpg" />
     <Content Include="Content\Hinh\garan.jpg" />
@@ -218,6 +219,7 @@
     <Content Include="Views\Shared\_LayoutAdmin.cshtml" />
     <Content Include="Views\Loai\QLLoai.cshtml" />
     <Content Include="Views\Loai\ChiTietLoai.cshtml" />
+    <Content Include="Views\Home\LienHe.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

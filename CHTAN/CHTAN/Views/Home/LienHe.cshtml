@@ -1,0 +1,92 @@
+﻿
+@{
+    ViewBag.Title = "LienHe";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<div class="banner-container">
+    <div class="banner-slides">
+        @foreach (var image in ViewBag.listhinh)
+        {
+            <div class="banner-slide">
+                <img src="~/Content/Hinh/@image[4]" alt="@image[4]" />
+            </div>
+        }
+    </div>
+</div>
+<div class="container">
+    <div class="category-container">
+        <form action="@Url.Action("LienHe")" method="get">
+            <label for="categorySelect">Chọn Khu Vực:</label>
+            <select id="categorySelect" name="category" onchange="filterProducts()">
+                <option value="">Tất cả</option>
+                @foreach (var category in ViewBag.listcn)
+                {
+                    <option value="@category[0]">@category[1]</option>
+                }
+            </select>
+        </form>
+    </div>
+    <div class="product-container">
+        @foreach (var a in ViewBag.list)
+        {
+            <div class="product-item" data-category="@a[3]">
+
+                <h3 class="product-title">Địa chỉ : @a[1]</h3>
+                <p class="product-description">Số điện thoại @a[2]</p>
+                <p class="product-price">
+                    Khu vực:
+                    @{
+                        var idkv = (string)a[3];
+                        var tenkv = string.Empty;
+                        foreach (var kv in ViewBag.listcn)
+                        {
+                            if ((string)kv[0] == idkv)
+                            {
+                                tenkv = (string)kv[1];
+                                break;
+                            }
+                        }
+                    }
+                    @tenkv
+                </p>
+            </div>
+        }
+    </div>
+</div>
+<script>
+        function filterProducts() {
+            var categorySelect = document.getElementById("categorySelect");
+            var selectedCategory = categorySelect.value;
+
+            var productItems = document.getElementsByClassName("product-item");
+
+            for (var i = 0; i < productItems.length; i++) {
+                var productItem = productItems[i];
+                var category = productItem.getAttribute("data-category");
+
+                if (selectedCategory === "" || category === selectedCategory) {
+                    productItem.style.display = "block";
+                } else {
+                    productItem.style.display = "none";
+                }
+            }
+        }
+</script>
+</body>
+<footer>
+    <div class="footer-container">
+        <div class="contact-info">
+            <h3>Liên hệ</h3>
+            <p>Hotline: 0123456789</p>
+            <p>Email: info@example.com</p>
+        </div>
+        <div class="social-media">
+            <h3>Mạng xã hội</h3>
+            <ul>
+                <li><a href="#">Facebook</a></li>
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#">Instagram</a></li>
+            </ul>
+        </div>
+    </div>
+</footer>

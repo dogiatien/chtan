@@ -4,7 +4,21 @@ go
 	go
     create database cnpmnc;
 go
-Use cnpmnc;
+Use cnpmnc
+Go
+Create Table KhuVuc
+(
+  IDKV Int primary key,
+  ThanhPho NVARCHAR(50),
+)
+Create Table ChiNhanh
+(
+  IDCN Int primary key,
+  Diachi  NVARCHAR(50),
+  SDT VARCHAR(50),
+  IDKV int,
+  Foreign key(IDKV) References  KhuVuc(IDKV)
+)
 Go
 -- Tạo bảng Users
 CREATE TABLE TaiKhoan (
@@ -113,7 +127,26 @@ VALUES
   (1, 1, 2, 11.98),
   (1, 2, 1, 9.99),
   (2, 2, 3, 29.97);
-
+ 
+ -- Chèn dữ liệu vào bảng KhuVuc
+   INSERT INTO  KhuVuc(IDKV,ThanhPho)
+VALUES (1, N'TP.HCM'),
+ (2, N'Hà Nội'),
+ (3, N'Đà Lạt'),
+ (4, N'Quy Nhơn'),
+ (5, N'Huế');
+-- Chèn dữ liệu vào bảng Chi nhanh
+  INSERT INTO ChiNhanh (IDCN, Diachi, SDT, IDKV)
+VALUES (1, N'Địa chỉ 1', '0123456789', 1),
+       (2, N'Địa chỉ 2', '0987654321',1),
+       (3, N'Địa chỉ 3', '0123456789', 2),
+       (4, N'Địa chỉ 4', '0987654321', 2),
+       (5, N'Địa chỉ 5', '0123456789', 3),
+       (6, N'Địa chỉ 6', '0987654321', 3),
+       (7, N'Địa chỉ 7', '0123456789',4),
+       (8, N'Địa chỉ 8', '0987654321', 4),
+       (9, N'Địa chỉ 9', '0123456789', 5),
+       (10, N'Địa chỉ 10', '0987654321',5 );
 
   -------------------------------------------------------------------------------------------
     ------------------------------Loai-------------------
@@ -359,3 +392,64 @@ Begin
 	Select * From TaiKhoan Where IDTK = @IdTK
 End
 -----------------------------------------------
+Go
+Create Proc PR_ChiNhanh
+AS
+Begin
+	Select * From ChiNhanh
+End
+Go
+Create Proc PR_ChiNhanhCT @id int
+AS
+Begin
+	Select * From ChiNhanh Where IDCN = @id
+End
+Go
+ Create Proc PR_ThemChiNhanh
+ @DiaChi nvarchar(50),
+ @SDT varchar(25),
+ @IDKV int
+ AS
+ Begin
+	Declare @IdTK int;
+	Select @IdTK = Max(IdCN)
+	From ChiNhanh
+	Set @IdTK = @IdTK + 1;
+	INSERT INTO ChiNhanh (IDCN, DiaChi, SDT, IDKV)
+VALUES
+  (@IdTK, @DiaChi, @SDT, @IDKV);
+End
+Go
+ Create Proc PR_SuaChiNhanh
+ @DiaChi nvarchar(50),
+ @SDT varchar(25),
+ @IdKV Int,
+ @IdTK int
+ AS
+ Begin
+	Update ChiNhanh
+	Set 
+	Diachi = @DiaChi, 
+	SDT = @SDT, 
+	IdKV = @IdKV
+	Where IDCN = @IdTK
+End
+Go 
+ Create Proc PR_XoaChiNhanh @IDNL int
+ AS
+ Begin
+	Delete From ChiNhanh Where IDCN= @IDNL
+End
+Go
+------------------------------------
+Create Proc PR_KhuVuc
+As
+Begin
+	Select * from KhuVuc 
+End
+Go
+Create Proc PR_CTKhuVuc @idkv int
+As
+Begin
+	Select * from KhuVuc where IDKV = @idkv
+End

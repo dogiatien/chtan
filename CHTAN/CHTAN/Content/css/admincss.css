@@ -19,6 +19,9 @@ nav {
     background-color: #555;
     color: #fff;
     padding: 10px;
+    align-items: center;
+    display: flex;
+    height:40px;
 }
 
 nav ul {
@@ -75,6 +78,7 @@ footer {
 ul {
     list-style-type: none;
     padding: 0;
+
 }
 
 footer p {

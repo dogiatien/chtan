@@ -36,5 +36,22 @@ namespace CHTAN.Controllers
             DataModel db = new DataModel();
             return View();
         }
+        public ActionResult LienHe(string category)
+        {
+            DataModel db = new DataModel();
+            ViewBag.listhinh = db.get("EXEC PR_Menu");
+            if (string.IsNullOrEmpty(category))
+            {
+                ViewBag.list = db.get("EXEC PR_ChiNhanh");
+            }
+            else
+            {
+                string query = string.Format("EXEC PR_CTKhuVuc N'" + category+"'");
+                ViewBag.list = db.get(query);
+            }
+            ViewBag.listcn = db.get("Execute PR_KhuVuc");
+            
+            return View();
+        }
     }
 }
