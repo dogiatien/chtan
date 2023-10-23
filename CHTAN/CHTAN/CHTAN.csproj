@@ -134,7 +134,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Content\css\trangchucss.css" />
+    <Compile Include="Controllers\ChiNhanhController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KhuVucController.cs" />
     <Compile Include="Controllers\LoaiController.cs" />
     <Compile Include="Controllers\MonAnController.cs" />
     <Compile Include="Controllers\NguyenLieuController.cs" />
@@ -220,6 +222,10 @@
     <Content Include="Views\Loai\QLLoai.cshtml" />
     <Content Include="Views\Loai\ChiTietLoai.cshtml" />
     <Content Include="Views\Home\LienHe.cshtml" />
+    <Content Include="Views\ChiNhanh\QLChiNhanh.cshtml" />
+    <Content Include="Views\ChiNhanh\CTCN.cshtml" />
+    <Content Include="Views\KhuVuc\QLKhuVuc.cshtml" />
+    <Content Include="Views\KhuVuc\ChiTietKV.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

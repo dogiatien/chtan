@@ -453,3 +453,32 @@ As
 Begin
 	Select * from KhuVuc where IDKV = @idkv
 End
+Go
+Create Proc Pr_ThemKhuVuc @ten nvarchar(20)
+As 
+Begin
+	Declare @IdTK int;
+	Select @IdTK = Max(IDKV)
+	From KhuVuc
+	Set @IdTK = @IdTK + 1;
+	INSERT INTO KhuVuc (IDKV,ThanhPho)
+VALUES
+  (@IdTK, @ten);
+End
+Go
+Create Proc Pr_SuaKhuVuc @ten nvarchar(20),
+@IdKV int
+As 
+Begin
+	Update KhuVuc
+	Set 
+	ThanhPho = @ten
+	Where IDKV = @IdKV
+End
+Go
+ Create Proc PR_XoaKhuVuc @IDNL int
+ AS
+ Begin
+	Delete From KhuVuc Where IDKV= @IDNL
+End
+Go

@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "QLChiNhanh";
+
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>QLMonAn</h2>
+<body>
+    <div class="category-container">
+        <form action="@Url.Action("QLChiNhanh")" method="get">
+            <label for="categorySelect">Danh mục món ăn:</label>
+            <select id="categorySelect" name="category" onchange="filterProducts()">
+                <option value="">Tất cả</option>
+                @foreach (var category in ViewBag.loai)
+                {
+                    <option value="@category[0]">@category[1]</option>
+                }
+            </select>
+            <input type="submit" value="Sắp xếp" />
+        </form>
+    </div>
+    <table class="custom-table">
+        <tr class="table-header">
+            <td>Id</td>
+            <td>Địa chỉ</td>
+            <td>Số điện thoại</td>
+            <td>Khu Vực</td>
+            <td>Thao Tác</td>
+        </tr>
+        @foreach (var a in ViewBag.list)
+        {
+            <tr class="product-item" data-category="@a[3]">
+                <td>@a[0]</td>
+                <td>@a[1]</td>
+                <td>@a[2]</td>
+                <td>
+                    @{
+                        var idloai = (string)a[3];
+                        var tenLoai = string.Empty;
+                        foreach (var Loai in ViewBag.loai)
+                        {
+                            if ((string)Loai[0] == idloai)
+                            {
+                                tenLoai = (string)Loai[1];
+                                break;
+                            }
+                        }
+                    }
+                    @tenLoai
+                </td>
+                <td class="table-actions">
+                    <a href="/ChiNhanh/XoaCN?id=@a[0]">Xóa</a>
+                    <a href="/ChiNhanh/CTCN?id=@a[0]">Sửa</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <form action="~/ChiNhanh/ThemChiNhanh" method="post" enctype="multipart/form-data" class="add-form">
+        Địa chỉ:<input type="text" name="diachi" /> <br />
+        Số điện thoại :<input type="text" name="sdt" /> <br />
+        Khu Vực :
+        <select name="idkv">
+            @foreach (var b in ViewBag.loai)
+            {
+                <option value="@b[0]">@b[1]</option>
+            }
+        </select><br />
+        <input type="submit" value="Thêm Chi Nhánh" />
+    </form>
+    <script>
+        function filterProducts() {
+            var categorySelect = document.getElementById("categorySelect");
+            var selectedCategory = categorySelect.value;
+
+            var productItems = document.getElementsByClassName("product-item");
+
+            for (var i = 0; i < productItems.length; i++) {
+                var productItem = productItems[i];
+                var category = productItem.getAttribute("data-category");
+
+                if (selectedCategory === "" || category === selectedCategory) {
+                    productItem.style.display = "table-row"; // Hiển thị hàng
+                    productItem.classList.add("custom-table"); // Thêm lớp "custom-table"
+                } else {
+                    productItem.style.display = "none"; // Ẩn hàng
+                    productItem.classList.remove("custom-table"); // Xóa lớp "custom-table"
+                }
+            }
+        }
+    </script>
+</body>

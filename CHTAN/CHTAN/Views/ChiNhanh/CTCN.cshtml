@@ -1,0 +1,28 @@
+﻿
+@{
+    ViewBag.Title = "CTCN";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h2>CTCN</h2>
+
+<form action="~/ChiNhanh/UpdateChiNhanh" method="post" enctype="multipart/form-data" class="add-form">
+    Mã Chi Nhánh :<input type="text" name="id" value=" @ViewBag.list[0][0]" /> <br />
+    Địa chỉ:<input type="text" name="diachi" value=" @ViewBag.list[0][1]" /> <br />
+    Số điện thoại :<input type="text" name="sdt" value="@ViewBag.list[0][2]" /> <br />
+    Khu Vực :
+ <select name="idkv">
+                             @foreach (var b in ViewBag.loai)
+                              {
+                                      if (b[0] == ViewBag.list[0][3])
+                                                           {
+                                                        <option value="@b[0]" selected>@b[1]</option>
+                                                                                        }
+                                               else
+                                                                  {
+                                                             <option value="@b[0]">@b[1]</option>
+                                         }
+                                              }
+                              </select><br />
+    <input type="submit" value="Sửa Chi Nhánh" />
+</form>
