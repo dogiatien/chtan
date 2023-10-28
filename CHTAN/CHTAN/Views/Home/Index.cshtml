@@ -16,74 +16,65 @@
             }
         </div>
     </div>
-    @*<div class="category-container">
-            <form action="@Url.Action("Index")" method="get">
-                <label for="categorySelect">Danh mục món ăn:</label>
-                <select id="categorySelect" name="category">
-                    <option value="">Tất cả</option>
-                    @foreach (var category in ViewBag.listloai)
-                    {
-                        <option value="@category[0]">@category[1]</option>
-                    }
-                </select>
-                <input type="submit" value="Sắp xếp" />
-            </form>
-        </div>
-        <div class="product-container">
-
-
-            @foreach (var a in ViewBag.list)
-            {
-                <div class="product-item">
-                    <img src="~/Content/Hinh/@a[4]" alt="@a[1]" class="product-image" />
-                    <h3 class="product-title">@a[1]</h3>
-                    <p class="product-description">@a[2]</p>
-                    <p class="product-price">Giá: @a[3]</p>
-                </div>
-            }
-        </div>*@
     <div class="container">
         <div class="category-container">
-            <form action="@Url.Action("Index")" method="get">
-                <label for="categorySelect">Danh mục món ăn:</label>
-                <select id="categorySelect" name="category" onchange="filterProducts()">
-                    <option value="">Tất cả</option>
-                    @foreach (var category in ViewBag.listloai)
-                    {
-                        <option value="@category[0]">@category[1]</option>
-                    }
-                </select>
-            </form>
-        </div>
-        <div class="product-container">
-            @foreach (var a in ViewBag.list)
-            {
-                <div class="product-item" data-category="@a[5]">
-                    <img style="height:200px;width:200px;" src="~/Content/Hinh/@a[4]" alt="@a[1]" class="product-image" />
-                    <h3 class="product-title">@a[1]</h3>
-                    <p class="product-description">@a[2]</p>
-                    <p class="product-price">Giá: @a[3]</p>
-                </div>
-            }
-        </div>
-    </div>
-    <script>
-        function filterProducts() {
-            var categorySelect = document.getElementById("categorySelect");
-            var selectedCategory = categorySelect.value;
-
-            var productItems = document.getElementsByClassName("product-item");
-
-            for (var i = 0; i < productItems.length; i++) {
-                var productItem = productItems[i];
-                var category = productItem.getAttribute("data-category");
-
-                if (selectedCategory === "" || category === selectedCategory) {
-                    productItem.style.display = "block";
-                } else {
-                    productItem.style.display = "none";
+            <label for="categorySelect">Danh mục món ăn:</label>
+            <select id="categorySelect" onchange="filterProducts()">
+                <option value="">Tất cả</option>
+                @foreach (var category in ViewBag.listloai)
+                {
+                    <option value="@category[0]">@category[1]</option>
                 }
+            </select>
+        </div>
+
+        @foreach (var category in ViewBag.listloai)
+        {
+            <p id="category-@category[0]" style="font-family: system-ui; font-size: 30px; font-weight: 700;"> @category[1]</p><br />
+            <div class="product-container" id="productContainer-@category[0]">
+                @foreach (var a in ViewBag.list)
+                {
+                    if (a[5] == category[0])
+                    {
+                        <div class="product-item" data-category="@a[5]">
+                            <img style="height:200px;width:200px;" src="~/Content/Hinh/@a[4]" alt="@a[1]" class="product-image" />
+                            <h3 class="product-title">@a[1]</h3>
+                            <p class="product-description">@a[2]</p>
+                            <p class="product-price">Giá: @a[3]</p>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+   
+<script>
+    function filterProducts() {
+        var categorySelect = document.getElementById("categorySelect");
+        var selectedCategory = categorySelect.value;
+
+        var productItems = document.getElementsByClassName("product-item");
+
+        for (var i = 0; i < productItems.length; i++) {
+            var productItem = productItems[i];
+            var categoryId = productItem.getAttribute("data-category");
+
+            if (selectedCategory === "" || categoryId === selectedCategory) {
+                productItem.style.display = "grid";
             }
         }
-    </script>
+
+        // Hiển thị tất cả các sản phẩm trong danh mục đã chọn
+        var selectedCategoryItems = document.querySelectorAll(".product-item[data-category='" + selectedCategory + "']");
+        for (var j = 0; j < selectedCategoryItems.length; j++) {
+            selectedCategoryItems[j].style.display = "grid";
+        }
+
+        // Cuộn xuống vị trí danh mục đồ ăn tương ứng
+        var categoryElement = document.getElementById("category-" + selectedCategory);
+        if (categoryElement) {
+            categoryElement.scrollIntoView({ behavior: "smooth" });
+        }
+    }
+</script>
 </body>

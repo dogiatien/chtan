@@ -167,6 +167,7 @@
     <Content Include="Content\css\admincss.css" />
     <Content Include="Content\css\editcss.css" />
     <Content Include="Content\Hinh\background.jpg" />
+    <Content Include="Content\Hinh\background1.png" />
     <Content Include="Content\Hinh\banhtrung.jpg" />
     <Content Include="Content\Hinh\cocacola.jpg" />
     <Content Include="Content\Hinh\garan.jpg" />

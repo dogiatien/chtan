@@ -5,8 +5,8 @@
 }
 body {
     background-color: #e4002b;
-    background-image: url('~/Content/Hinh/background.jpg');
     background-repeat: no-repeat;
+    background: url('../Hinh/background1.png');
     background-size: cover;
     background-position: center;
     margin: 0;
@@ -216,6 +216,12 @@ footer {
 .contact-info, .social-media {
     flex-basis: 50%;
 }
+.contact-info p
+{
+    font-size:20px;
+    font-weight:600;
+
+}
 
     .social-media ul {
         list-style-type: none;
@@ -230,3 +236,48 @@ footer {
             .social-media ul li:last-child {
                 margin-right: 0;
             }
+.facebook {
+    color: dodgerblue;
+    font-family: system-ui;
+    font-weight: 700;
+    text-decoration: none;
+}
+.instagram {
+    color: white;
+    font-family: system-ui;
+    font-weight: 700;
+    text-decoration: none;
+}
+.twitter {
+    color: lightblue;
+    font-family: system-ui;
+    font-weight: 700;
+    text-decoration: none;
+}
+.fa {
+    padding: 20px;
+    font-size: 30px;
+    width: 30px;
+    text-align: center;
+    text-decoration: none;
+    margin: 5px 2px;
+    border-radius: 50%;
+}
+
+    .fa:hover {
+        opacity: 0.7;
+    }
+
+.fa-facebook {
+    background: #3B5998;
+    color: white;
+}
+
+.fa-twitter {
+    background: #55ACEE;
+    color: white;
+}
+.fa-instagram {
+    background: #125688;
+    color: white;
+}

@@ -16,19 +16,35 @@ namespace CHTAN.Controllers
         //    ViewBag.listloai = db.get("Exec PR_Loai");
         //    return View();
         //}
-        public ActionResult Index(string category)
+        //public ActionResult Index()
+        //{
+        //    DataModel db = new DataModel();
+
+        //    // Lấy danh sách danh mục
+        //    ViewBag.listloai = db.get("EXEC PR_Loai");
+
+        //    //if (string.IsNullOrEmpty(category))
+        //    //{
+        //        // Lấy danh sách sản phẩm khi không có danh mục được chọn
+        //        ViewBag.list = db.get("EXEC PR_Menu");
+        //        ViewBag.listall = db.get("EXEC PR_Menu");
+        //    //}
+        //    //else
+        //    //{
+        //    //    string query = string.Format("EXEC PR_TimTheoLoai " + category);
+        //    //    // Lấy danh sách sản phẩm dựa trên danh mục được chọn
+        //    //    ViewBag.list = db.get(query);
+        //    //}
+
+        //    return View();
+        //}
+        public ActionResult Index()
         {
             DataModel db = new DataModel();
-            if (string.IsNullOrEmpty(category))
-            {
-                ViewBag.list = db.get("EXEC PR_Menu");
-            }
-            else
-            {
-                string query = string.Format("EXEC PR_TimTheoLoai " + category);
-                ViewBag.list = db.get(query);
-            }
+
+            // Lấy danh sách danh mục
             ViewBag.listloai = db.get("EXEC PR_Loai");
+            ViewBag.list = db.get("EXEC PR_Menu");
             return View();
         }
         public ActionResult Admin()
