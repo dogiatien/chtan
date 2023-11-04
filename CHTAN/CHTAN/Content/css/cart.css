@@ -1,0 +1,74 @@
+﻿/* CSS cho trang giỏ hàng */
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.cart-row {
+    background-color: #f9f9f9;
+}
+
+.cart-header {
+    font-weight: bold;
+    padding: 10px;
+   text-align:center;
+}
+.cart-item {
+    padding: 10px;
+}
+.cart-item-quantity {
+    padding: 10px;
+}
+
+.cart-item-total {
+    padding: 10px;
+}
+
+.cart-item-actions {
+    padding: 10px;
+}
+
+.cart-summary {
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+    .cart-summary input[type="text"],
+    .cart-summary input[type="submit"] {
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+
+.order-date {
+    margin-top: 20px;
+}
+
+/* Responsive CSS */
+@media screen and (max-width: 768px) {
+    .cart-table {
+        font-size: 14px;
+    }
+
+    .cart-item-name,
+    .cart-item-quantity,
+    .cart-item-total,
+    .cart-item-actions {
+        padding: 5px;
+    }
+
+    .cart-summary {
+        padding: 10px;
+    }
+
+        .cart-summary input[type="text"],
+        .cart-summary input[type="submit"] {
+            margin-bottom: 5px;
+            padding: 3px;
+            display: flex;
+            margin: auto;
+            margin-top: 10px;
+            width: 100%;
+            display: flex;
+        }
+}
+

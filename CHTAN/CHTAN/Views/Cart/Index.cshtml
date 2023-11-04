@@ -1,0 +1,300 @@
+﻿@*@using CHTAN.Models
+    @{
+        ViewBag.Title = "Home Page";
+        Layout = "~/Views/Shared/_LayoutMain.cshtml";
+        var taikhoan = Session["taikhoan"] as string;
+    }
+    <h2>Shopping Cart</h2>
+
+    <div style="display:flex">
+        <div>
+            <table class="">
+                <tr class="">
+                    <td>Món ăn</td>
+                    <td>Số Lượng</td>
+                    <td>Số tiền</td>
+                    <td>Thao Tác</td>
+                </tr>
+
+                @{ decimal tongTienTotal = 0;}
+                @foreach (var a in ViewBag.list)
+                {
+
+                    <tr class="product-item" data-category="@a[3]">
+                        <td>
+                            @{
+                                var idma = (string)a[2];
+                                var tenma = string.Empty;
+                                foreach (var ma in ViewBag.listma)
+                                {
+                                    if ((string)ma[0] == idma)
+                                    {
+                                        tenma = (string)ma[1];
+                                        break;
+                                    }
+                                }
+                            }
+                            @tenma
+                        </td>
+                        <td>
+                            <form action="~/Cart/UpdateCart" method="post" enctype="multipart/form-data" class="add-form">
+                                @{System.Collections.ArrayList b = ((System.Collections.ArrayList)Session["taikhoan"]);
+                                }
+                                <input type="hidden" name="idcart" value="@a[0]" />
+                                <input type="hidden" name="idma" value="@a[2]" />
+                                <input type="hidden" name="idtk" value="@b[0]" />
+                                <input type="number" name="soluong" id="soluong" value="@a[3]" onchange="toggleSubmitButton(this)" />
+                                <button type="submit" id="submitButton" style="display: none;">Cập nhật</button>
+                            </form>
+                        </td>
+                        <td class="tongtien">
+                            @{
+                                decimal tongTien = Convert.ToDecimal(a[4]);
+                                tongTienTotal = tongTienTotal + tongTien;
+                            }
+                            @a[4]
+                        </td>
+                        <td>
+                            <form action="~/Cart/DeleteItem" method="post" enctype="multipart/form-data" >
+                                    <input type="hidden" name="idma" value="@a[2]" />
+                                    <input type="hidden" name="idtk" value="@b[0]" />
+                                    <button type="submit">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+
+                }
+            </table>
+        </div>
+        <div>
+            <div>
+                <form action="~/Cart/CheckOut" method="post"enctype="multipart/form-data" >
+                    <p>Tong Tien :</p>
+                    <input type="text"name="tongtien" value="@tongTienTotal.ToString("N0")" readonly /><br />
+                    <p>Địa chỉ</p>
+                    <input type="text" name="diachi" />
+                    <br />
+                    <input type="text" name="ngaydat" id="currentDateField">
+                    <input type="submit" value="Đặt Hàng" />
+                </form>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSubmitButton(inputElement) {
+            var submitButton = inputElement.parentElement.querySelector("button[type='submit']");
+
+            if (inputElement.value !== "") {
+                submitButton.style.display = "flex";
+            } else {
+                submitButton.style.display = "none";
+            }
+        }
+        // Lấy trường ngày từ DOM
+        var currentDateField = document.getElementById("currentDateField");
+
+        // Lấy ngày hiện tại
+        var currentDate = new Date();
+
+        // Định dạng ngày thành chuỗi YYYY-MM-DD
+        var formattedDate = currentDate.toISOString().split("T")[0];
+
+        // Đặt giá trị ngày hiện tại vào thuộc tính value của trường ngày
+        currentDateField.value = formattedDate;
+    </script>*@
+@using CHTAN.Models
+@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    var taikhoan = Session["taikhoan"] as string;
+    <link rel="stylesheet" type="text/css" href="~/Content/css/cart.css">
+}
+<style>
+    .delete-button {
+        font-size: 45px;
+        font-weight: 600;
+        background: 0;
+        border: 0;
+        color: indianred;
+    }
+    #checkout {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        height: 50px;
+        font-family: system-ui;
+        font-size: 25px;
+        font-weight: 700;
+        
+    }
+    .cart-item-name {
+        display: flex;
+        align-items: center;
+        margin-right: 10px;
+        margin-left: 50px;
+        font-family: system-ui;
+        font-size: x-large;
+        font-weight: 500;
+    }
+
+    .inputnumber {
+        width: 50px;
+        height: 50px;
+        font-size: xx-large;
+        text-align:center;
+    }
+
+    .input-number::-webkit-inner-spin-button,
+    .input-number::-webkit-outer-spin-button {
+        height: 24px; /* Chiều cao của nút bấm */
+        width: 24px; /* Chiều rộng của nút bấm */
+    }
+
+    #submitButton {
+        background: white;
+        border: 0;
+        color: lime;
+        font-size: 45px;
+        font-weight: 700;
+        width: 50px;
+        height: 54.1px;
+        margin-left: 15px
+    }
+    #checkinfo {
+        width: 95%;
+        height: 45px;
+        text-align: center;
+        font-size: 30px;
+        font-weight: 900;
+        color: indianred;
+        border: solid 5px indianred;
+        margin: 0 auto;
+        margin-bottom: 35px;
+        font-family: system-ui;
+    }
+    .infodes {
+        text-align: center;
+        font-size: 24px;
+        color:darkgray;
+        font-weight: 700;
+        font-family: system-ui;
+        margin-bottom:10px;
+    }
+</style>
+<div style="display:flex">
+    <div style="width:60% ;margin:0 auto;">
+        <table class="cart-table">
+            <tr class="cart-row">
+                <td class="cart-header" style=" width: 45%;">Món ăn</td>
+                <td class="cart-header" style=" width: 20%;">Số Lượng</td>
+                <td class="cart-header" style=" width: 20%;">Số tiền</td>
+                <td class="cart-header" style=" width: 20%;">Thao Tác</td>
+            </tr>
+
+            @{ decimal tongTienTotal = 0;}
+            @foreach (var a in ViewBag.list)
+            {
+                <tr class="cart-item" data-category="@a[3]">
+                    <td class="cart-item">
+                        <div style="display:flex">
+                            <div>
+                                @{
+                                    var idma = (string)a[2];
+                                    var hinhma = string.Empty;
+                                    foreach (var ma in ViewBag.listma)
+                                    {
+                                        if ((string)ma[0] == idma)
+                                        {
+                                            hinhma = (string)ma[4];
+                                            break;
+                                        }
+                                    }
+                                }
+                                <img style="height:200px;width:200px;" src="~/Content/Hinh/@hinhma" alt="@a[1]" class="product-image" />
+                            </div>
+                            <div class="cart-item-name">
+                                @{
+                                    var tenma = string.Empty;
+                                    foreach (var ma in ViewBag.listma)
+                                    {
+                                        if ((string)ma[0] == idma)
+                                        {
+                                            tenma = (string)ma[1];
+                                            break;
+                                        }
+                                    }
+                                }
+                                @tenma
+                            </div>
+                        </div>
+                    </td>
+                    <td class="cart-item-quantity">
+                        <form style="display:flex;" action="~/Cart/UpdateCart" method="post" enctype="multipart/form-data" class="add-form">
+                            @{System.Collections.ArrayList b = ((System.Collections.ArrayList)Session["taikhoan"]);
+                            }
+                            <input type="hidden" name="idcart" value="@a[0]" />
+                            <input type="hidden" name="idma" value="@a[2]" />
+                            <input type="hidden" name="idtk" value="@b[0]" />
+                            <input type="number" class="inputnumber" name="soluong" id="soluong" value="@a[3]" onchange="toggleSubmitButton(this)" />
+                            <button type="submit" id="submitButton" style="display: none;">O</button>
+                        </form>
+                    </td>
+                    <td class="cart-item-total">
+                        @{
+                            decimal tongTien = Convert.ToDecimal(a[4]);
+                            tongTienTotal = tongTienTotal + tongTien;
+                        }
+                        @a[4]
+                    </td>
+                    <td class="cart-item-actions">
+                        <form action="~/Cart/DeleteItem" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="idma" value="@a[2]" />
+                            <input type="hidden" name="idtk" value="@b[0]" />
+                            <button class="delete-button" type="submit">X</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div style=" margin: auto; margin-top: 20px; border: 5px solid indianred; padding: 10px; width: 400px; }">
+        <div class="cart-summary">
+            <form action="~/Cart/CheckOut" method="post" enctype="multipart/form-data">
+                @{System.Collections.ArrayList c = ((System.Collections.ArrayList)Session["taikhoan"]);
+                }
+                <input type="hidden" name="idtk" value="@c[0]" />
+                <p class="infodes">Tổng Tiền :</p>
+                <input id="checkinfo" type="text" name="tongtien" value="@tongTienTotal.ToString("N0")" readonly /><br />
+                <p class="infodes">Địa chỉ:</p>
+                <input id="checkinfo" type="text" name="diachi" />
+                <br />
+                <p class="infodes" >Ngày Đặt Hàng:</p>
+                <input style=" width: 95%; height: 45px; text-align: center; font-size: 30px; font-weight: 900; color: indianred; border: solid 5px indianred; margin: 0 auto; margin-bottom: 35px; font-family: system-ui;" type="text" name="ngaydat" id="currentDateField">
+                <input style="background: firebrick;"id="checkout" type="submit" value="Đặt Hàng" />
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleSubmitButton(inputElement) {
+        var submitButton = inputElement.parentElement.querySelector("button[type='submit']");
+
+        if (inputElement.value !== "") {
+            submitButton.style.display = "flex";
+        } else {
+            submitButton.style.display = "none";
+        }
+    }
+    // Lấy trường ngày từ DOM
+    var currentDateField = document.getElementById("currentDateField");
+
+    // Lấy ngày hiện tại
+    var currentDate = new Date();
+
+    // Định dạng ngày thành chuỗi YYYY-MM-DD
+    var formattedDate = currentDate.toISOString().split("T")[0];
+
+    // Đặt giá trị ngày hiện tại vào thuộc tính value của trường ngày
+    currentDateField.value = formattedDate;
+</script>

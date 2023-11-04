@@ -1,0 +1,95 @@
+﻿
+@{
+    ViewBag.Title = "ThanhToan";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/Payment.css">
+    var taikhoan = Session["taikhoan"] as string;
+}
+<head>
+    <title>Thanh toán</title>
+    <script src="https://www.paypal.com/sdk/js?client-id=AYNVKZyD0S6n2sssn6dEnuNKXU3kX1foCJo3Yi2wa520nob112j4C94M-bR0TbvWH32-BAvhK5EDXgJS&currency=USD"></script>
+</head>
+<div class="container">
+    <p> Đây là hóa đơn cho đơn hàng của bạn vui lòng kiểm tra thật kỹ</p>
+    <br />
+    <p>Mã hóa đơn : @ViewBag.list[0][0]</p>
+    <br />
+    <p>Ngày Đặt Hàng : @ViewBag.list[0][2]</p>
+    <br />
+    <table>
+        <tr>
+            <td>Sản phẩm</td>
+            <td>Số lượng</td>
+            <td>Số tiền</td>
+        </tr>
+        @foreach (var a in ViewBag.listcthd)
+        {
+            <tr>
+                <td>
+                    @{
+                        var idma = (string)a[2];
+                        var tenma = string.Empty;
+                        foreach (var ma in ViewBag.listma)
+                        {
+                            if ((string)ma[0] == idma)
+                            {
+                                tenma = (string)ma[1];
+                                break;
+                            }
+                        }
+                    }
+                     @tenma
+                </td>
+                <td>
+                    x @a[3]
+                </td>
+                <td>
+                     @a[4] vnđ
+                </td>
+            </tr>
+
+        }
+    </table>
+    <p>
+        Tổng tiền : @ViewBag.list[0][5]
+    </p>
+    @{
+        string value = ViewBag.list[0][5].Split('.')[0];
+    }
+
+    <br />
+    <p>Vui lòng chọn phương thức thanh toán:</p>
+    <button id="cash-on-delivery-button">Thanh toán khi nhận hàng</button>
+    <div id="online-payment-button">Thanh toán trực tuyến</div>
+</div>
+<script>
+
+    paypal.Buttons({
+        createOrder: function (data, actions) {
+            // Tạo yêu cầu thanh toán PayPal
+            return actions.order.create({
+                purchase_units: [{
+                    amount: {
+
+                        value: "@value",
+
+                    }
+                }]
+            });
+        },
+        onApprove: function (data, actions) {
+
+            return actions.order.capture().then(function (details) {
+
+                window.location.href = "/Cart/ThanhToanSuccess?id=@ViewBag.list[0][0]";
+            });
+        }
+    }).render('#online-payment-button');
+</script>
+<script>
+    document.getElementById("cash-on-delivery-button").addEventListener("click", function () {
+        // Xử lý khi người dùng chọn thanh toán khi nhận hàng
+        // Redirect hoặc hiển thị thông báo thành công
+        window.location.href = "/Home/ThankYou";
+    });
+</script>

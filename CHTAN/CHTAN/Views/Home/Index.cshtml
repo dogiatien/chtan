@@ -2,10 +2,10 @@
     ViewBag.Title = "Home Page";
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
     <link rel="stylesheet" type="text/css" href="~/Content/css/trangchucss.css">
+    var taikhoan = Session["taikhoan"] as string;
 }
 <body>
 
-    </form>
     <div class="banner-container">
         <div class="banner-slides">
             @foreach (var image in ViewBag.list)
@@ -16,6 +16,27 @@
             }
         </div>
     </div>
+    @*<div style="width: 80%; height: 400px; background-color: #FFEAE9;border-radius:9px;margin-right:auto;margin-left:auto; display:flex">
+        <div class="qc">
+            <div>
+                <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;margin-top:auto;margin-bottom:auto" />
+                <div>Nhận đặt tiệc</div>
+            </div>
+        </div>
+        <div class="qc">
+            <div>
+                <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;" />
+                <div>Free Ship</div>
+            </div>
+        </div>
+        <div class="qc">
+            <div>
+                <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;margin-top:auto;margin-bottom:auto" />
+                <div>Khuyến Mãi Khủng</div>
+            </div>
+        </div>
+
+    </div>*@
     <div class="container">
         <div class="category-container">
             <label for="categorySelect">Danh mục món ăn:</label>
@@ -41,40 +62,60 @@
                             <h3 class="product-title">@a[1]</h3>
                             <p class="product-description">@a[2]</p>
                             <p class="product-price">Giá: @a[3]</p>
+                            <div class="button-container">
+                                @if (Session["taikhoan"] == null)
+                                {
+                                    <!-- Nếu người dùng chưa đăng nhập, hiển thị nút Đăng nhập -->
+                                    <a style="text-decoration:0"class="addcart" href="~/Home/Login">Thêm vào giỏ hàng</a>
+
+                                }
+                                else
+                                {
+                                    <!-- Nếu người dùng đã đăng nhập, hiển thị nút Thêm vào giỏ hàng -->
+                                    System.Collections.ArrayList b = ((System.Collections.ArrayList)Session["taikhoan"]);
+                                    <form action="@Url.Action("AddToCart", "Cart")" method="post">
+                                        <input type="hidden" name="idma" value="@a[0]" />
+                                        <input type="hidden" name="idtk" value="@b[0]" />
+                                        <button class="addcart" type="submit">Thêm vào giỏ hàng</button>
+                                    </form>
+                                }
+                            </div>
                         </div>
                     }
                 }
             </div>
         }
     </div>
-   
-<script>
-    function filterProducts() {
-        var categorySelect = document.getElementById("categorySelect");
-        var selectedCategory = categorySelect.value;
 
-        var productItems = document.getElementsByClassName("product-item");
+    <script>
+        function filterProducts() {
+            var categorySelect = document.getElementById("categorySelect");
+            var selectedCategory = categorySelect.value;
 
-        for (var i = 0; i < productItems.length; i++) {
-            var productItem = productItems[i];
-            var categoryId = productItem.getAttribute("data-category");
+            var productItems = document.getElementsByClassName("product-item");
 
-            if (selectedCategory === "" || categoryId === selectedCategory) {
-                productItem.style.display = "grid";
+            for (var i = 0; i < productItems.length; i++) {
+                var productItem = productItems[i];
+                var categoryId = productItem.getAttribute("data-category");
+
+                if (selectedCategory === "" || categoryId === selectedCategory) {
+                    productItem.style.display = "grid";
+                }
+            }
+
+            // Hiển thị tất cả các sản phẩm trong danh mục đã chọn
+            var selectedCategoryItems = document.querySelectorAll(".product-item[data-category='" + selectedCategory + "']");
+            for (var j = 0; j < selectedCategoryItems.length; j++) {
+                selectedCategoryItems[j].style.display = "grid";
+            }
+
+            // Cuộn xuống vị trí danh mục đồ ăn tương ứng
+            var categoryElement = document.getElementById("category-" + selectedCategory);
+            if (categoryElement) {
+                categoryElement.scrollIntoView({ behavior: "smooth" });
             }
         }
 
-        // Hiển thị tất cả các sản phẩm trong danh mục đã chọn
-        var selectedCategoryItems = document.querySelectorAll(".product-item[data-category='" + selectedCategory + "']");
-        for (var j = 0; j < selectedCategoryItems.length; j++) {
-            selectedCategoryItems[j].style.display = "grid";
-        }
 
-        // Cuộn xuống vị trí danh mục đồ ăn tương ứng
-        var categoryElement = document.getElementById("category-" + selectedCategory);
-        if (categoryElement) {
-            categoryElement.scrollIntoView({ behavior: "smooth" });
-        }
-    }
-</script>
+    </script>
 </body>

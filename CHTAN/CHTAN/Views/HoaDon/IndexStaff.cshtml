@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutStaff.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+<h2>Quản lý các hóa đơn</h2>
+@foreach (var a in ViewBag.list)
+{
+    <table class="custom-table">
+        <tr class="table-header" >
+            <td>
+                Mã Hóa Đơn
+            </td>
+            <td>
+                Mã Tài Khoản
+            </td>
+            <td>
+                Ngày Đặt
+            </td>
+            <td>
+                Địa chỉ
+            </td>
+            <td>
+                Trạng Thái
+            </td>
+            <td>
+                Tổng Tiền
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @a[0]
+            </td>
+            <td>
+                @a[1]
+            </td>
+            <td>
+                @a[2]
+            </td>
+            <td>
+                @a[3]
+            </td>
+            <td>
+                @a[4]
+            </td>
+            <td>
+                @a[5]
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Sản phẩm
+            </td>
+            <td>
+                Số lượng
+            </td>
+            <td>
+                Số tiền
+            </td>
+            <td>
+                Thao Tác
+            </td>
+        </tr>
+        @foreach (var b in ViewBag.listcthd)
+        {
+
+            var mahd = (string)a[0];
+            var idma = (string)b[2];
+            var tenma = string.Empty;
+
+            if (mahd == a[0])
+            {
+                foreach (var ma in ViewBag.listma)
+                {
+                    if ((string)ma[0] == idma)
+                    {
+                        tenma = (string)ma[1];
+                        break;
+                    }
+                }
+            }
+
+            <tr>
+                <td>
+                    @tenma
+                </td>
+                <td>
+                    x @b[3]
+                </td>
+                <td>
+                    @b[4] vnđ
+                </td>
+                <td class="table-actions">
+                    <a  href="/HoaDon/ThanhToanSuccess?id=@a[0]">Xác nhận thanh toán</a>
+                    <a  href="/HoaDon/DeleteHD?id=@a[0]">Xóa</a>
+                </td>
+            </tr>
+            
+        }
+    </table>
+
+}

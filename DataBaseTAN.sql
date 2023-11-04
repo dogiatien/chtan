@@ -56,26 +56,41 @@ CREATE TABLE MonAn(
   FOREIGN KEY (IdNL) REFERENCES NguyenLieu(IdNL)
 );
 Go
--- Tạo bảng Orders
-CREATE TABLE DatHang (
-  MaDat INT PRIMARY KEY,
+CREATE TABLE Cart (
+  IDCart INT,
+  IDTK INT,
+  IDMA INT,
+  SoLuong INT,
+  SoTien Decimal(9,3),
+  FOREIGN KEY (IDTK) REFERENCES TaiKhoan(IDTK),
+  FOREIGN KEY (IDMA) REFERENCES MonAn(IdMA),
+  CONSTRAINT PK_Cart PRIMARY KEY (IDCart, IDTK, IDMA)
+);
+Go
+-- Tạo bảng HoaDon
+CREATE TABLE HoaDon (
+  MaHD INT Identity(1,1) PRIMARY KEY,
   IdTK INT,
-  NgayDat DATE,
-  TrangThai VARCHAR(50),
+  NgayDat Varchar(15),
+  DiaChi NVARCHAR(50),
+  TrangThai NVARCHAR(50),
+  TongTien DECIMAL(9, 3),
   FOREIGN KEY (IdTK) REFERENCES TaiKhoan(IdTK)
 );
-Go
--- Tạo bảng Order_Items
-CREATE TABLE CTDonHang (
-  MaDat INT ,
-  IdMA INT,
+
+-- Tạo bảng CTHD
+CREATE TABLE CTHD (
+  MaHD INT,
+  IDTK INT,
+  IDMA INT,
   SoLuong INT,
-  TongTien Decimal (9,3)
-  FOREIGN KEY (MaDat) REFERENCES DatHang(MaDat),
-  FOREIGN KEY (IdMA) REFERENCES MonAn(IdMA),
-  CONSTRAINT PK_CTDonHang PRIMARY KEY (MaDat, IdMA)
+  TongTien DECIMAL(9, 3),
+  PRIMARY KEY (MaHD, IDTK, IDMA),
+  FOREIGN KEY (MaHD) REFERENCES HoaDon(MaHD),
+  FOREIGN KEY (IDMA) REFERENCES MonAn(IdMA),
+  FOREIGN KEY (IDTK) REFERENCES TaiKhoan(IdTK)
 );
-Go
+
 -- Chèn dữ liệu vào bảng TaiKhoan
 INSERT INTO TaiKhoan (IDTK, TenDN, MatKhau, TenTK, SDT, ChucVu)
 VALUES
@@ -113,21 +128,7 @@ VALUES
   (6, N'Bánh trứng', N'Bánh trứng tặng kèm giờ có thể mua riêng', 5, 'banhtrung.jpg', 1, 1),
   (7, N'Sting dâu', N'Sting hương dâu 250ml', 25, 'sting.jpg', 2, 7),
   (8, N'Khoai tây chiên', N'Khoai tây chiên cỡ vừa', 20, 'khoaitaychien.jpg', 1, 6);
-
-  Go
--- Chèn dữ liệu vào bảng DatHang
-INSERT INTO DatHang (MaDat, IdTK, NgayDat, TrangThai)
-VALUES
-  (1, 1, '2023-09-29', N'Đang chuẩn bị'),
-  (2, 2, '2023-09-28', N'Đã giao hàng');
-  Go
--- Chèn dữ liệu vào bảng CTDonHang
-INSERT INTO CTDonHang (MaDat, IdMA, SoLuong, TongTien)
-VALUES
-  (1, 1, 2, 11.98),
-  (1, 2, 1, 9.99),
-  (2, 2, 3, 29.97);
- 
+Go
  -- Chèn dữ liệu vào bảng KhuVuc
    INSERT INTO  KhuVuc(IDKV,ThanhPho)
 VALUES (1, N'TP.HCM'),
@@ -482,3 +483,198 @@ Go
 	Delete From KhuVuc Where IDKV= @IDNL
 End
 Go
+----------------------------------------------
+Create Proc Pr_Login @username varchar(20),@password varchar(20)
+As
+Begin
+	Select * from TaiKhoan Where TenDN =@username AND MatKhau = @password
+ENd
+Go
+-----------------------------------------------
+Go 
+CREATE PROCEDURE InsertOrUpdateCartItem
+    @IDMA INT,
+    @IDTK INT
+AS
+BEGIN
+    DECLARE @IdCart INT;
+    DECLARE @SoLuong INT;
+    DECLARE @TongTien DECIMAL(9, 3);
+
+    -- Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+    SELECT @IdCart = IDCart, @SoLuong = SoLuong
+    FROM Cart
+    WHERE IDTK = @IDTK AND IDMA = @IDMA;
+
+    IF (@@ROWCOUNT > 0)
+    BEGIN
+        -- Nếu đã có, cập nhật số lượng thành giá trị mới
+        UPDATE Cart
+        SET SoLuong = @SoLuong + 1,
+            SoTien = (SELECT DonGia FROM MonAn WHERE IdMA = @IDMA) * (@SoLuong + 1)
+        WHERE IDCart = @IdCart;
+    END
+    ELSE
+    BEGIN
+        -- Nếu chưa có, thêm sản phẩm vào giỏ hàng
+        SET @SoLuong = 1;
+
+        SELECT @IdCart = ISNULL(MAX(IdCart), 0) + 1
+        FROM Cart;
+
+        SET @TongTien = (SELECT DonGia FROM MonAn WHERE IdMA = @IDMA) * @SoLuong;
+
+        INSERT INTO Cart (IDCart, IDTK, IDMA, SoLuong, SoTien)
+        VALUES (@IdCart, @IDTK, @IDMA, @SoLuong, @TongTien);
+    END;
+END;
+Go
+CREATE PROCEDURE UpdateCartItem
+    @IDCart INT,
+	@IDTK INT,
+	@IDMA INT,
+    @SoLuong INT
+AS
+BEGIN
+    DECLARE @DonGia DECIMAL(9, 3);
+    DECLARE @TongTien DECIMAL(9, 3);
+
+    -- Lấy đơn giá từ bảng MonAn
+    SELECT @DonGia = DonGia
+    FROM MonAn
+    WHERE IdMA = @IDMA;
+
+    -- Tính tổng tiền
+    SET @TongTien = @DonGia * @SoLuong;
+
+    -- Cập nhật số lượng và tổng tiền trong bảng Cart
+    UPDATE Cart
+    SET SoLuong = @SoLuong,
+        SoTien = @TongTien
+    WHERE IDCart = @IDCart AND IDTK = @IDTK AND IDMA = @IDMA;
+END
+GO
+CREATE PROCEDURE DeleteCartItem
+    @IDTK INT,
+	@IDMA INT
+AS
+BEGIN
+    DELETE FROM Cart
+    WHERE IDMA = @IDMA AND IDTK = @IDTK
+END
+Go
+CREATE PROCEDURE GetCartItemsByCustomer
+    @IDTK INT
+AS
+BEGIN
+    SELECT *
+    FROM Cart
+    WHERE IDTK = @IDTK
+END
+---------------------------------------------
+
+Go
+CREATE PROCEDURE InsertHoaDon
+  @IdTK INT,
+  @NgayDat Varchar(15),
+  @DiaChi NVARCHAR(50),
+  @TongTien DECIMAL(9, 3)
+AS
+BEGIN
+    INSERT INTO HoaDon (IdTK, NgayDat, DiaChi, TrangThai, TongTien)
+    VALUES (@IdTK, @NgayDat, @DiaChi, N'Đã đặt hàng', @TongTien);
+END
+
+Go
+CREATE PROCEDURE InsertCTHD
+  @IDTK INT
+AS
+BEGIN
+	Declare @MaxMaHD INT
+	Declare @MaHD INT
+	Declare @IDMA INT
+	Declare @SoLuong INT
+	Declare @TongTien DECIMAL(9, 3)
+
+	-- Lặp qua từng dòng trong cart và chèn vào bảng CTHD
+	WHILE EXISTS (SELECT 1 FROM cart WHERE IDTK = @IDTK)
+	BEGIN
+		-- Lấy dòng đầu tiên từ cart
+		SELECT TOP 1 @IDMA = IDMA, @SoLuong = SoLuong, @TongTien = SoTien
+		FROM cart
+		WHERE IDTK = @IDTK
+
+		-- Lấy mã hoá đơn lớn nhất cho IDTK
+		SELECT @MaxMaHD = MAX(MaHD)
+		FROM HoaDon
+		WHERE IDTK = @IDTK
+		
+		-- Gán mã hoá đơn cho biến @MaHD
+		SET @MaHD = @MaxMaHD
+		
+		-- Chèn dữ liệu từng dòng vào bảng CTHD
+		INSERT INTO CTHD (MaHD, IDTK, IDMA, SoLuong, TongTien)
+		VALUES (@MaHD, @IDTK, @IDMA, @SoLuong, @TongTien)
+
+		-- Xóa dòng đã xử lý từ bảng cart
+		DELETE TOP (1)
+		FROM cart
+		WHERE IDTK = @IDTK 
+	END
+END
+Go
+Create Proc Proc_HoaDonMoiNhat 
+@IDTK int
+As
+Begin
+	Declare @MaHD int;
+	Select @MaHD = Max(MaHD)
+	From HoaDon
+	Where IdTK = @IDTK
+
+	Select * From HoaDon Where MaHD =@MaHD And IDTK = @IDTK 
+End 
+Go
+Create Proc Proc_CTHDMoiNhat 
+@IDTK int
+As
+Begin
+	Declare @MaHD int;
+	Select @MaHD = Max(MaHD)
+	From HoaDon
+	Where IdTK = @IDTK
+
+	Select * From CTHD Where MaHD =@MaHD And IDTK = @IDTK 
+End 
+--------------------------------------------------------------
+Go
+Create Proc Pr_HoaDon
+As
+Begin
+	Select * From HoaDon
+End
+Go
+Create Proc Pr_CtHD
+As
+	Begin
+	Select * From CTHD 
+End
+Go
+Create Proc Pr_ThanhToan
+@mahd int
+As
+Begin
+	Update HoaDon
+	Set TrangThai = N'Đã Thanh Toán'
+	Where MaHD = @mahd
+End
+Go
+Create Proc Pr_XoaHoaDon
+@mahd int
+As
+Begin
+	Delete From CTHD
+	Where MaHD = @mahd
+	Delete From HoaDon
+	Where MaHD = @mahd
+End

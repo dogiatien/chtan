@@ -4,6 +4,7 @@
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/Content/css/trangchucss.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
 </head>
 <body>
     <div class="container">
@@ -11,10 +12,26 @@
             <ul>
                 <li><a href="/Home/Index">Trang chủ</a></li>
                 <li><a href="~/Home/LienHe">Liên hệ</a></li>
+
+                @if (Session["taikhoan"] == null)
+                {
+                    <li>
+                        <a href="/Home/Login">Đăng nhập</a>
+                    </li>
+                }
+                else
+                {
+                    System.Collections.ArrayList a = ((System.Collections.ArrayList)Session["taikhoan"]);
+                    <li>Xin chào @a[1]</li>
+                    <li> <a href="/Home/Logout">Đăng xuất</a></li>
+                    <li> <a href="/Cart/Index?id=@a[0]">Giỏ Hàng</a></li>
+                }
+
+
             </ul>
         </nav>
 
-        <main>
+        <main style="width:100%">
             @RenderBody()
         </main>
 
@@ -24,6 +41,9 @@
                     <h3>Liên hệ</h3>
                     <p>Hotline: 0123456789</p>
                     <p>Email: info@example.com</p>
+
+
+
                 </div>
                 <div class="social-media">
                     <h3>Mạng xã hội</h3>

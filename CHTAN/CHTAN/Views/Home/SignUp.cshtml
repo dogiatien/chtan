@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "SignUp";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        .su-container {
+            width:75%;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+            form label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            form input[type="text"],
+            form input[type="password"] {
+                width: 100%;
+                padding: 8px;
+                margin-bottom: 10px;
+                border-radius: 3px;
+                border: 1px solid #ccc;
+                box-sizing: border-box;
+            }
+
+            form input[type="submit"] {
+                width: 100%;
+                padding: 10px;
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+
+                form input[type="submit"]:hover {
+                    background-color: #45a049;
+                }
+    </style>
+</head>
+<body >
+    <div class="su-container">
+        <h2>SignUp</h2>
+        <form action="~/Home/DangKy" method="post">
+            <label for="tendn">Tên Đăng Nhập:</label>
+            <input type="text" name="tendn" id="tendn" required><br>
+            <label for="matkhau">Mật Khẩu:</label>
+            <input type="password" name="matkhau" id="matkhau" required><br>
+            <label for="tentk">Tên tài khoản:</label>
+            <input type="text" name="tentk" id="tentk" required><br>
+            <label for="sdt">Số điện thoại:</label>
+            <input type="text" name="sdt" id="sdt" required><br>
+            <input type="hidden" name="loaitk" value="3">
+            <input type="submit" value="Thêm tài khoản">
+        </form>
+    </div>
+</body>
+</html>

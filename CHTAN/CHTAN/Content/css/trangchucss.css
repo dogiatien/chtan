@@ -1,7 +1,31 @@
-﻿.container {
+﻿main{
+    min-height:80vh;
+}
+.button-container {
+    display: flex;
+    justify-content: center; /* căn giữa theo chiều ngang */
+    align-items: center; /* căn giữa theo chiều dọc */
+    margin-top: 10px; /* khoảng cách từ nút đến các phần tử trên */
+ 
+}
+.addcart {
+    border: 0;
+    background: 0;
+    font-family: system-ui;
+    color: indianred;
+    font-size: large;
+    font-weight: 700;
+}
+.container {
     max-width: 80%;
     margin: 0 auto;
     font-family: system-ui;
+}
+.qc{
+    margin-left :auto;
+    margin-right:auto;
+    font-weight:600;
+    color:red;
 }
 body {
     background-color: #e4002b;
@@ -10,7 +34,6 @@ body {
     background-size: cover;
     background-position: center;
     margin: 0;
-    auto;
 }
 nav {
     background-color: #333;
@@ -35,6 +58,12 @@ nav {
         }
 
             nav ul li a {
+                color: #fff;
+                text-decoration: none;
+                padding: 5px;
+            }
+
+            nav ul li p {
                 color: #fff;
                 text-decoration: none;
                 padding: 5px;
@@ -90,7 +119,7 @@ input[type="submit"] {
 
 .product-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: auto auto auto auto ;
     grid-gap: 20px;
 }
 

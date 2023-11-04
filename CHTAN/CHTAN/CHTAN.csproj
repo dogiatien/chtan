@@ -133,18 +133,23 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Content Include="Content\css\Payment.css" />
     <Content Include="Content\css\trangchucss.css" />
+    <Content Include="Content\css\cart.css" />
     <Compile Include="Controllers\ChiNhanhController.cs" />
+    <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KhuVucController.cs" />
     <Compile Include="Controllers\LoaiController.cs" />
     <Compile Include="Controllers\MonAnController.cs" />
     <Compile Include="Controllers\NguyenLieuController.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Controllers\TaiKhoanController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\DataModel.cs" />
+    <Compile Include="Models\CartItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -174,8 +179,11 @@
     <Content Include="Content\Hinh\hambugarga.png" />
     <Content Include="Content\Hinh\hamburgerbo.jpg" />
     <Content Include="Content\Hinh\khoaitaychien.jpg" />
+    <Content Include="Content\Hinh\km.png" />
     <Content Include="Content\Hinh\popcornga.jpg" />
+    <Content Include="Content\Hinh\ship.png" />
     <Content Include="Content\Hinh\sting.jpg" />
+    <Content Include="Content\Hinh\tiec.png" />
     <Content Include="Content\Hinh\ucga.jpg" />
     <Content Include="Content\styles.css" />
     <Content Include="favicon.ico" />
@@ -227,6 +235,16 @@
     <Content Include="Views\ChiNhanh\CTCN.cshtml" />
     <Content Include="Views\KhuVuc\QLKhuVuc.cshtml" />
     <Content Include="Views\KhuVuc\ChiTietKV.cshtml" />
+    <Content Include="Views\Home\Login.cshtml" />
+    <Content Include="Views\Cart\Index.cshtml" />
+    <Content Include="Views\Cart\ThanhToan.cshtml" />
+    <Content Include="Views\Home\ThankYou.cshtml" />
+    <Content Include="Views\HoaDon\Index.cshtml" />
+    <Content Include="Views\Cart\ThanhToanSuccess.cshtml" />
+    <Content Include="Views\Home\Staff.cshtml" />
+    <Content Include="Views\Shared\_LayoutStaff.cshtml" />
+    <Content Include="Views\HoaDon\IndexStaff.cshtml" />
+    <Content Include="Views\Home\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
