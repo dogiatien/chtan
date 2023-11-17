@@ -3,6 +3,8 @@
     Layout = "~/Views/Shared/_LayoutMain.cshtml";
     <link rel="stylesheet" type="text/css" href="~/Content/css/trangchucss.css">
     var taikhoan = Session["taikhoan"] as string;
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 }
 <body>
 
@@ -17,26 +19,26 @@
         </div>
     </div>
     @*<div style="width: 80%; height: 400px; background-color: #FFEAE9;border-radius:9px;margin-right:auto;margin-left:auto; display:flex">
-        <div class="qc">
-            <div>
-                <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;margin-top:auto;margin-bottom:auto" />
-                <div>Nhận đặt tiệc</div>
+            <div class="qc">
+                <div>
+                    <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;margin-top:auto;margin-bottom:auto" />
+                    <div>Nhận đặt tiệc</div>
+                </div>
             </div>
-        </div>
-        <div class="qc">
-            <div>
-                <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;" />
-                <div>Free Ship</div>
+            <div class="qc">
+                <div>
+                    <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;" />
+                    <div>Free Ship</div>
+                </div>
             </div>
-        </div>
-        <div class="qc">
-            <div>
-                <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;margin-top:auto;margin-bottom:auto" />
-                <div>Khuyến Mãi Khủng</div>
+            <div class="qc">
+                <div>
+                    <img src="~/Content/Hinh/tiec.png" style="height:200px;width:200px;margin-top:auto;margin-bottom:auto" />
+                    <div>Khuyến Mãi Khủng</div>
+                </div>
             </div>
-        </div>
 
-    </div>*@
+        </div>*@
     <div class="container">
         <div class="category-container">
             <label for="categorySelect">Danh mục món ăn:</label>
@@ -54,30 +56,98 @@
             <p id="category-@category[0]" style="font-family: system-ui; font-size: 30px; font-weight: 700;"> @category[1]</p><br />
             <div class="product-container" id="productContainer-@category[0]">
                 @foreach (var a in ViewBag.list)
-                {
+                {//Tính tổng số lượng nguyên liệu
+                    var idnl = (string)a[6];
+                    int slnl = 0;
+
+
+                    foreach (var nl in ViewBag.listnl)
+                    {
+                        if ((string)nl[0] == idnl)
+                        {
+                            string quantityString = (string)nl[2];
+                            slnl = int.Parse(quantityString);
+                            break;
+                        }
+                    }
+                    // lấy khuyến mãi
+                    var idkm = (string)a[7];
+
+
+
                     if (a[5] == category[0])
                     {
                         <div class="product-item" data-category="@a[5]">
                             <img style="height:200px;width:200px;" src="~/Content/Hinh/@a[4]" alt="@a[1]" class="product-image" />
                             <h3 class="product-title">@a[1]</h3>
                             <p class="product-description">@a[2]</p>
-                            <p class="product-price">Giá: @a[3]</p>
+                            @if (idkm == "1")
+                            {
+                                <p class="product-price">Giá: @a[3]</p>
+                            }
+                            else
+                            {
+                                <p class="product-price-del" style=" margin-top: 5px; font-size: 14px; font-weight: 700; color: lightgray; text-align: center;"><del>Giá: @a[3]</del></p>
+                                <p class="product-price" style="color: #ff7f7f">
+                                    Giá : @{
+
+                                        decimal giamgia = 0;
+                                        decimal gia = Convert.ToDecimal(a[3]);
+                                        decimal giakm = 0;
+                                        foreach (var km in ViewBag.listkm)
+                                        {
+                                            if ((string)km[0] == idkm)
+                                            {
+                                                giamgia = Convert.ToDecimal(km[1]);
+                                                giakm = gia - giamgia;
+                                                break;
+                                            }
+
+                                        }
+
+                                    }@giakm
+                                </p>
+                            }
+                            <p class="product-description">Số lượng: @slnl</p>
                             <div class="button-container">
                                 @if (Session["taikhoan"] == null)
                                 {
-                                    <!-- Nếu người dùng chưa đăng nhập, hiển thị nút Đăng nhập -->
-                                    <a style="text-decoration:0"class="addcart" href="~/Home/Login">Thêm vào giỏ hàng</a>
+                                    if (slnl <= 0)
+                                    {
+                                        <p style="text-decoration:0" class="addcart">Hết hàng</p>
+                                    }
+                                    else
+                                    {
+                                        <!-- Nếu người dùng chưa đăng nhập, hiển thị nút Đăng nhập -->
+                                        <a style="text-decoration:0" class="addcart" href="~/Home/Login">Thêm vào giỏ hàng</a>
+                                    }
 
                                 }
                                 else
                                 {
                                     <!-- Nếu người dùng đã đăng nhập, hiển thị nút Thêm vào giỏ hàng -->
-                                    System.Collections.ArrayList b = ((System.Collections.ArrayList)Session["taikhoan"]);
-                                    <form action="@Url.Action("AddToCart", "Cart")" method="post">
-                                        <input type="hidden" name="idma" value="@a[0]" />
-                                        <input type="hidden" name="idtk" value="@b[0]" />
-                                        <button class="addcart" type="submit">Thêm vào giỏ hàng</button>
-                                    </form>
+
+
+                                    if (slnl <= 0)
+                                    {
+                                        <p style="text-decoration:0" class="addcart">Hết hàng</p>
+                                    }
+                                    else
+                                    {
+                                        System.Collections.ArrayList b = ((System.Collections.ArrayList)Session["taikhoan"]);
+                                        @*<form action="@Url.Action("AddToCart", "Cart")" method="post">
+                                            <input type="hidden" name="idma" value="@a[0]" />
+                                            <input type="hidden" name="idtk" value="@b[0]" />
+                                            <button class="addcart" type="submit">Thêm vào giỏ hàng</button>
+                                        </form>*@
+                            <form class="addToCartForm" data-idma="@a[0]" data-idtk="@b[0]">
+                                <!-- Use a class and data attributes -->
+                                <input type="hidden" name="idma" value="@a[0]" />
+                                <input type="hidden" name="idtk" value="@b[0]" />
+                                <button class="addcart" type="submit">Thêm vào giỏ hàng</button>
+                            </form>
+                                    }
+
                                 }
                             </div>
                         </div>
@@ -115,7 +185,26 @@
                 categoryElement.scrollIntoView({ behavior: "smooth" });
             }
         }
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(".addToCartForm").submit(function (e) { // Use the class selector
+                e.preventDefault();
 
+                var form = $(this); // Get the current form
+                var idma = form.data("idma"); // Use data attributes to retrieve values
+                var idtk = form.data("idtk");
 
+                $.ajax({
+                    url: "/Cart/AddToCart",
+                    type: "POST",
+                    data: { idma: idma, idtk: idtk },
+                    success: function (result) {
+                        alert("Thêm vào giỏ hàng thành công");
+                        $("#cartCount").text(result.cartCount);
+                    }
+                });
+            });
+        });
     </script>
 </body>

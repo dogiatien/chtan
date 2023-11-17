@@ -140,6 +140,7 @@
     <Compile Include="Controllers\HoaDonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\KhuVucController.cs" />
+    <Compile Include="Controllers\KMController.cs" />
     <Compile Include="Controllers\LoaiController.cs" />
     <Compile Include="Controllers\MonAnController.cs" />
     <Compile Include="Controllers\NguyenLieuController.cs" />
@@ -245,6 +246,9 @@
     <Content Include="Views\Shared\_LayoutStaff.cshtml" />
     <Content Include="Views\HoaDon\IndexStaff.cshtml" />
     <Content Include="Views\Home\SignUp.cshtml" />
+    <Content Include="Views\Home\Info.cshtml" />
+    <Content Include="Views\KM\QLKM.cshtml" />
+    <Content Include="Views\KM\ChiTietKM.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

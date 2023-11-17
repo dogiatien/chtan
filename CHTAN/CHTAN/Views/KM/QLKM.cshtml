@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "QLLoai";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+
+<body>
+    <table class="custom-table">
+        <tr class="table-header">
+            <td>Id</td>
+            <td>Giảm Giá</td>
+            <td>Thao tác</td>
+        </tr>
+        @foreach (var a in ViewBag.list)
+        {
+            <tr>
+                <td>@a[0]</td>
+                <td>@a[1]</td>
+                <td class="table-actions">
+                    <a href="/KM/XoaKM?id=@a[0]">Xóa</a>
+                    <a href="/KM/ChiTietKM?id=@a[0]">Sửa</a>
+                </td>
+            </tr>
+        }
+    </table>
+    <form action="~/KM/ThemKM" method="post" class="add-form">
+        Giảm giá:<input type="text" name="loai" /><br />
+        <input type="submit" value="Thêm Khuyến Mãi" />
+    </form>
+</body>

@@ -8,7 +8,7 @@
 <h2>Quản lý các hóa đơn</h2>
 @foreach (var a in ViewBag.list)
 {
-    <table class="custom-table">
+    <table   class="custom-table">
         <tr class="table-header" >
             <td>
                 Mã Hóa Đơn
@@ -59,8 +59,13 @@
             <td>
                 Số tiền
             </td>
-            <td>
-                Thao Tác
+         
+            <td colspan="3"class="table-actions">
+                @if (a[4]=="Đã Thanh Toán")
+                { }
+                else
+                { <a href="/HoaDon/ThanhToanSuccess?id=@a[0]">Xác nhận thanh toán</a>}
+                <a href="/HoaDon/DeleteHD?id=@a[0]">Xóa</a>
             </td>
         </tr>
         @foreach (var b in ViewBag.listcthd)
@@ -92,10 +97,7 @@
                 <td>
                     @b[4] vnđ
                 </td>
-                <td class="table-actions">
-                    <a  href="/HoaDon/ThanhToanSuccess?id=@a[0]">Xác nhận thanh toán</a>
-                    <a  href="/HoaDon/DeleteHD?id=@a[0]">Xóa</a>
-                </td>
+  
             </tr>
             
         }

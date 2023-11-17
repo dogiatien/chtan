@@ -193,8 +193,36 @@
             </tr>
 
             @{ decimal tongTienTotal = 0;}
+         
             @foreach (var a in ViewBag.list)
             {
+                var idmas = (string)a[2];
+                var idnl = string.Empty;
+                var idkm = string.Empty;
+
+                foreach (var ima in ViewBag.listma)
+                {
+                    if ((string)ima[0] == idmas)
+                    {
+                        idnl = (string)ima[6];
+                        idkm = (string)ima[7];
+                        break;
+                    }
+                }
+
+                int slnl = 0;
+
+                foreach (var nl in ViewBag.listnl)
+                {
+                    if ((string)nl[0] == idnl)
+                    {
+                        string quantityString = (string)nl[2];
+                        slnl = int.Parse(quantityString);
+                        break;
+                    }
+                }
+
+
                 <tr class="cart-item" data-category="@a[3]">
                     <td class="cart-item">
                         <div style="display:flex">
@@ -236,7 +264,7 @@
                             <input type="hidden" name="idcart" value="@a[0]" />
                             <input type="hidden" name="idma" value="@a[2]" />
                             <input type="hidden" name="idtk" value="@b[0]" />
-                            <input type="number" class="inputnumber" name="soluong" id="soluong" value="@a[3]" onchange="toggleSubmitButton(this)" />
+                            <input type="number" class="inputnumber" name="soluong" id="soluong" min="1" max="@slnl" value="@a[3]" onchange="toggleSubmitButton(this)" />
                             <button type="submit" id="submitButton" style="display: none;">O</button>
                         </form>
                     </td>

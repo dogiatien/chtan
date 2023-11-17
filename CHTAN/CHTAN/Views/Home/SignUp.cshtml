@@ -7,57 +7,91 @@
 <head>
     <title>@ViewBag.Title</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
-        }
-
-        .su-container {
-            width:75%;
+        <style >
+        .info {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            max-width: 800px;
             margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
 
-        h2 {
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
             text-align: center;
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        form {
+        input[type="text"] {
+            height: 25px;
+            display: flex;
+            margin: 0 auto;
+            text-align: center;
+            width: 83%;
+            border: 1px solid #ccc;
+            border-radius: 90px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        input[type="password"] {
+            height: 25px;
+            display: flex;
+            margin: 0 auto;
+            text-align: center;
+            width: 83%;
+            border: 1px solid #ccc;
+            border-radius: 90px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        main {
+            margin-top: 100px;
+        }
+
+        .submit-button {
+            display: flex;
+            padding-left: 35px;
+            font-size: 20px;
+            background-color: #e04d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: auto;
+            width: 200px;
+            height: 50px;
+            font-weight: 700;
+            font-family: system-ui;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .info {
             margin-top: 20px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
         }
-
-            form label {
-                display: block;
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-
-            form input[type="text"],
-            form input[type="password"] {
-                width: 100%;
-                padding: 8px;
-                margin-bottom: 10px;
-                border-radius: 3px;
-                border: 1px solid #ccc;
-                box-sizing: border-box;
-            }
-
-            form input[type="submit"] {
-                width: 100%;
-                padding: 10px;
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-                border-radius: 3px;
-                cursor: pointer;
-            }
-
-                form input[type="submit"]:hover {
-                    background-color: #45a049;
-                }
     </style>
 </head>
 <body >

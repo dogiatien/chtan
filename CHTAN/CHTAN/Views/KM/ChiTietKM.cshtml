@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewBag.Title = "ChiTietLoai";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <link rel="stylesheet" type="text/css" href="~/Content/css/editcss.css">
+}
+
+
+<form action="~/KM/UpdateKM" method="post" enctype="multipart/form-data" class="add-form">
+    Mã KM:<input type="text" name="id" value="@ViewBag.list[0][0]" /><br />
+    Giảm giả :<input type="text" name="loai" value="@ViewBag.list[0][1]" /><br />
+    <input type="submit" value="Sửa Loại" />
+</form>
+

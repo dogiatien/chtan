@@ -38,6 +38,13 @@ namespace CHTAN.Controllers
             ViewBag.listUpdate = db.get("EXEC PR_SuaTaiKhoan  '" + tendn + "' , '" + matkhau + "', N'" + tentk + "' , ' " + sdt + " ' , " + id);
             return RedirectToAction("QLTaiKhoan", "TaiKhoan");
         }
+        public ActionResult UpdateTks(string id, string tendn, string matkhau, string tentk, string sdt)
+        {
+            DataModel db = new DataModel();
+            ViewBag.list = db.get("EXEC PR_ChiTietTK " + id);
+            ViewBag.listUpdate = db.get("EXEC PR_SuaTaiKhoan  '" + tendn + "' , '" + matkhau + "', N'" + tentk + "' , '" + sdt + "' , " + id);
+            return RedirectToAction("Info", "Home",new { id = id });
+        }
         public ActionResult Sort(string searchBy) 
         {
             DataModel db = new DataModel();

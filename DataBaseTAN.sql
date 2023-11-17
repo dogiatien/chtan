@@ -43,6 +43,12 @@ Create Table NguyenLieu
 	DonGia Decimal (9,3),
 )
 Go
+Go
+CREATE TABLE KhuyenMai (
+  IDKM INT PRIMARY KEY,
+  GiamGia DECIMAL(9, 3)
+);
+Go
 -- Tạo bảng Products
 CREATE TABLE MonAn(
   IdMA INT PRIMARY KEY,
@@ -52,8 +58,10 @@ CREATE TABLE MonAn(
   HinhAnh VARCHAR(200),
   IdLoai INT,
   IdNL INT,
+  IDKM INT,
   FOREIGN KEY (IdLoai) REFERENCES Loai(IdLoai),
-  FOREIGN KEY (IdNL) REFERENCES NguyenLieu(IdNL)
+  FOREIGN KEY (IdNL) REFERENCES NguyenLieu(IdNL),
+   FOREIGN KEY (IDKM) REFERENCES KhuyenMai(IDKM)
 );
 Go
 CREATE TABLE Cart (
@@ -78,6 +86,7 @@ CREATE TABLE HoaDon (
   FOREIGN KEY (IdTK) REFERENCES TaiKhoan(IdTK)
 );
 
+Go
 -- Tạo bảng CTHD
 CREATE TABLE CTHD (
   MaHD INT,
@@ -90,6 +99,12 @@ CREATE TABLE CTHD (
   FOREIGN KEY (IDMA) REFERENCES MonAn(IdMA),
   FOREIGN KEY (IDTK) REFERENCES TaiKhoan(IdTK)
 );
+Go
+INSERT INTO KhuyenMai (IDKM, GiamGia)
+VALUES
+  (1, 0),
+  (2, 5),
+  (3, 10);
 
 -- Chèn dữ liệu vào bảng TaiKhoan
 INSERT INTO TaiKhoan (IDTK, TenDN, MatKhau, TenTK, SDT, ChucVu)
@@ -118,16 +133,16 @@ VALUES
 
   Go
 -- Chèn dữ liệu vào bảng MonAn
-INSERT INTO MonAn (IdMA, TenMA, Mota, DonGia, HinhAnh, IdLoai, IdNL)
+INSERT INTO MonAn (IdMA, TenMA, Mota, DonGia, HinhAnh, IdLoai, IdNL,IDKM)
 VALUES
-  (1, N'Đùi gà rán', N'Đùi gà rán KFC truyền thống', 25, 'garan.jpg', 1, 1),
-  (2, N'Cocacola', N'Coca cola lon 100ml', 20, 'cocacola.jpg', 2, 2),
-  (3, N'Ức gà', N'Ức gà rán KFC truyền thống', 25, 'ucga.jpg', 1, 5),
-  (4, N'Hamburger gà', N'Hamburger với thịt gà kfc', 30, 'hambugarga.png', 1, 5),
-  (5, N'Hamburger bò', N'Hamburger với thịt bò phô mai', 30, 'hamburgerbo.jpg', 1, 4),
-  (6, N'Bánh trứng', N'Bánh trứng tặng kèm giờ có thể mua riêng', 5, 'banhtrung.jpg', 1, 1),
-  (7, N'Sting dâu', N'Sting hương dâu 250ml', 25, 'sting.jpg', 2, 7),
-  (8, N'Khoai tây chiên', N'Khoai tây chiên cỡ vừa', 20, 'khoaitaychien.jpg', 1, 6);
+  (1, N'Đùi gà rán', N'Đùi gà rán KFC truyền thống', 25, 'garan.jpg', 1, 1,3),
+  (2, N'Cocacola', N'Coca cola lon 100ml', 20, 'cocacola.jpg', 2, 2,1),
+  (3, N'Ức gà', N'Ức gà rán KFC truyền thống', 25, 'ucga.jpg', 1, 5,1),
+  (4, N'Hamburger gà', N'Hamburger với thịt gà kfc', 30, 'hambugarga.png', 1, 5,1),
+  (5, N'Hamburger bò', N'Hamburger với thịt bò phô mai', 30, 'hamburgerbo.jpg', 1, 4,1),
+  (6, N'Bánh trứng', N'Bánh trứng tặng kèm giờ có thể mua riêng', 5, 'banhtrung.jpg', 1, 1,1),
+  (7, N'Sting dâu', N'Sting hương dâu 250ml', 25, 'sting.jpg', 2, 7,1),
+  (8, N'Khoai tây chiên', N'Khoai tây chiên cỡ vừa', 20, 'khoaitaychien.jpg', 1, 6,1);
 Go
  -- Chèn dữ liệu vào bảng KhuVuc
    INSERT INTO  KhuVuc(IDKV,ThanhPho)
@@ -247,9 +262,9 @@ Go
 	Select @IdMA = Max(IdMA)
 	From MonAn
 	Set @IdMA = @IdMA + 1;
-	INSERT INTO MonAn (IdMA, TenMA, Mota, DonGia, HinhAnh, IdLoai, IdNL)
+	INSERT INTO MonAn (IdMA, TenMA, Mota, DonGia, HinhAnh, IdLoai, IdNL,IDKM)
 VALUES
-  (@IdMA,@TenMA,@Mota, @DonGia, @HinhAnh, @IdLoai, @IdNL);
+  (@IdMA,@TenMA,@Mota, @DonGia, @HinhAnh, @IdLoai, @IdNL,1);
 End
 Go
  Create Proc PR_SuaMonAn
@@ -259,6 +274,7 @@ Go
  @HinhAnh varchar(200),
  @IdLoai int,
  @IdNL int,
+ @IDKM int,
  @IdMA int
  AS
  Begin
@@ -268,7 +284,8 @@ Go
 	DonGia = @DonGia,
 	HinhAnh = @HinhAnh,
 	IdLoai = @IdLoai,
-	IdNL = @IdNL
+	IdNL = @IdNL,
+	IDKM = @IDKM
 	Where IdMA = @IdMA
 End
 
@@ -500,6 +517,10 @@ BEGIN
     DECLARE @IdCart INT;
     DECLARE @SoLuong INT;
     DECLARE @TongTien DECIMAL(9, 3);
+	Declare @IDKM int;
+	Select @IDKM = IDKM from MonAn where IDMA = @IDMA
+	Declare @GiamGia DECIMAL(9, 3);
+	Select @GiamGia=GiamGia  from KhuyenMai Where IDKM = @IDKM
 
     -- Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
     SELECT @IdCart = IDCart, @SoLuong = SoLuong
@@ -511,7 +532,7 @@ BEGIN
         -- Nếu đã có, cập nhật số lượng thành giá trị mới
         UPDATE Cart
         SET SoLuong = @SoLuong + 1,
-            SoTien = (SELECT DonGia FROM MonAn WHERE IdMA = @IDMA) * (@SoLuong + 1)
+            SoTien = ((SELECT DonGia FROM MonAn WHERE IdMA = @IDMA)-@GiamGia) * (@SoLuong + 1)
         WHERE IDCart = @IdCart;
     END
     ELSE
@@ -522,12 +543,16 @@ BEGIN
         SELECT @IdCart = ISNULL(MAX(IdCart), 0) + 1
         FROM Cart;
 
-        SET @TongTien = (SELECT DonGia FROM MonAn WHERE IdMA = @IDMA) * @SoLuong;
+        SET @TongTien = ((SELECT DonGia FROM MonAn WHERE IdMA = @IDMA)-@GiamGia) * @SoLuong;
 
         INSERT INTO Cart (IDCart, IDTK, IDMA, SoLuong, SoTien)
         VALUES (@IdCart, @IDTK, @IDMA, @SoLuong, @TongTien);
     END;
 END;
+Go
+--Exec InsertOrUpdateCartItem 1,3;
+--drop Proc InsertOrUpdateCartItem;
+
 Go
 CREATE PROCEDURE UpdateCartItem
     @IDCart INT,
@@ -538,6 +563,11 @@ AS
 BEGIN
     DECLARE @DonGia DECIMAL(9, 3);
     DECLARE @TongTien DECIMAL(9, 3);
+	
+		Declare @IDKM int;
+	Select @IDKM = IDKM from MonAn where IDMA = @IDMA
+	Declare @GiamGia DECIMAL(9, 3);
+	Select @GiamGia=GiamGia  from KhuyenMai Where IDKM = @IDKM
 
     -- Lấy đơn giá từ bảng MonAn
     SELECT @DonGia = DonGia
@@ -545,7 +575,7 @@ BEGIN
     WHERE IdMA = @IDMA;
 
     -- Tính tổng tiền
-    SET @TongTien = @DonGia * @SoLuong;
+    SET @TongTien = (@DonGia - @GiamGia ) * @SoLuong;
 
     -- Cập nhật số lượng và tổng tiền trong bảng Cart
     UPDATE Cart
@@ -678,3 +708,90 @@ Begin
 	Delete From HoaDon
 	Where MaHD = @mahd
 End
+Go
+CREATE TRIGGER tr_CTMA_Insert
+ON CTHD
+AFTER INSERT
+AS
+BEGIN
+    -- Cập nhật số lượng trong bảng NguyenLieu cho từng sản phẩm đã thêm vào
+    UPDATE NL
+    SET NL.SoLuong = NL.SoLuong - I.SoLuong
+    FROM NguyenLieu NL
+    INNER JOIN MonAn MA ON NL.IdNL = MA.IdNL
+    INNER JOIN Inserted I ON MA.IdMA = I.IDMA;
+END;
+Go
+CREATE PROCEDURE ThongKeSoLuong
+    @IDMA INT
+AS
+BEGIN
+    SELECT SUM(SoLuong) AS TotalQuantity
+    FROM CTHD
+    WHERE IDMA = @IDMA;
+END
+
+SELECT IDMA,SUM(SoLuong) AS TotalQuantity
+    FROM CTHD
+    Group by IDMA
+
+---------------------------------------------
+Go
+CREATE PROCEDURE HoaDonTK
+    @ID INT
+AS
+BEGIN
+    SELECT *
+    FROM CTHD
+    WHERE IDTK = @ID
+END
+
+---------------------------------------------
+Go
+CREATE PROCEDURE HoaDonTKS
+    @ID INT
+AS
+BEGIN
+    SELECT *
+    FROM HoaDon
+    WHERE IDTK = @ID
+END
+---------------------------
+Go
+Create Proc Pr_CTKM
+@id int
+As
+Begin
+	Select * From KhuyenMai where IDKM = @id
+End
+Go
+ Create Proc PR_XoaKM @IDNL int
+ AS
+ Begin
+	Delete From KhuyenMai Where IDKM = @IDNL
+End
+Go
+ Create Proc PR_ThemKM
+ @GiamGia Decimal(9,3)
+ As
+ Begin
+	Declare @IdNL int;
+	Select @IdNL = Max(IDKM)
+	From KhuyenMai
+	Set @IdNL = @IdNL + 1;
+	INSERT INTO KhuyenMai (IdKM, GiamGia)
+VALUES
+  (@IdNL, @GiamGia);
+End
+Go
+ Create Proc PR_SuaKM
+ @GiamGia Nvarchar(25),
+ @IdNl int
+ AS
+ Begin
+	Update KhuyenMai
+	Set 
+	GiamGia= @GiamGia 
+	Where IDKM = @IdNl
+End
+Go

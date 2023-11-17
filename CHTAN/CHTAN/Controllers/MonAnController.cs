@@ -17,6 +17,7 @@ namespace CHTAN.Controllers
             ViewBag.list = db.get("EXEC PR_Menu");
             ViewBag.loai = db.get("Exec PR_Loai");
             ViewBag.listnl = db.get("EXEC PR_NguyenLieu");
+            ViewBag.listkm = db.get("Select * From KhuyenMai");
             return View();
         }
         public ActionResult CTMA(string id)
@@ -25,13 +26,14 @@ namespace CHTAN.Controllers
             ViewBag.list = db.get("EXEC PR_ChiTietMA " + id);
             ViewBag.loai = db.get("Exec PR_Loai");
             ViewBag.listnl = db.get("EXEC PR_NguyenLieu");
+            ViewBag.listkm = db.get("Select * From KhuyenMai");
             return View();
         }
         [HttpPost]
-        public ActionResult UpdateMA(string tenma, string mt, string dongia, string ha, string loai, string nl, string id)
+        public ActionResult UpdateMA(string tenma, string mt, string dongia, string ha, string loai, string nl, string km,string id)
         {
             DataModel db = new DataModel();
-            ViewBag.list = db.get("EXEC PR_SuaMonAn  N'" + tenma + "', N'" + mt + "', " + dongia + ", '" + ha + "'," + loai + "," + nl +"," + id);
+            ViewBag.list = db.get("EXEC PR_SuaMonAn  N'" + tenma + "', N'" + mt + "', " + dongia + ", '" + ha + "'," + loai + "," + nl +"," + km + ","+ id);
             return RedirectToAction("QLMonAn", "MonAn");
         }
         public ActionResult XoaMA(String id)

@@ -18,17 +18,27 @@ namespace CHTAN.Controllers
         {
             DataModel db = new DataModel();
             ViewBag.list = db.get("EXEC GetCartItemsByCustomer " + id);
+            ViewBag.listnl = db.get("EXEC PR_NguyenLieu");
             ViewBag.listma = db.get("EXEC PR_Menu");
             return View();
         }
 
         // Phương thức để thêm sản phẩm vào giỏ hàng
+        //[HttpPost]
+        //public ActionResult AddToCart(string idma, string idtk)
+        //{
+        //    DataModel db = new DataModel();
+        //    ViewBag.list = db.get("EXEC InsertOrUpdateCartItem " + idma +"," + idtk);
+        //    return RedirectToAction("Index","Home");
+        //}
         [HttpPost]
         public ActionResult AddToCart(string idma, string idtk)
         {
             DataModel db = new DataModel();
-            ViewBag.list = db.get("EXEC InsertOrUpdateCartItem " + idma +"," + idtk);
-            return RedirectToAction("Index","Home");
+            var cartCount = db.get("EXEC InsertOrUpdateCartItem " + idma + "," + idtk);
+
+            // Trả về kết quả dưới dạng JSON
+            return Json(new { cartCount = cartCount });
         }
         [HttpPost]
         public ActionResult UpdateCart(string soluong, string idtk ,string idma,string idcart)

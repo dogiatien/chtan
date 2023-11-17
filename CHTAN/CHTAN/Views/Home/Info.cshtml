@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "Info";
+    Layout = "~/Views/Shared/_LayoutMain.cshtml";
+    <style>
+        .info {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            text-align: center;
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"] {
+            height: 25px;
+            display: flex;
+            margin: 0 auto;
+            text-align: center;
+            width: 83%;
+            border: 1px solid #ccc;
+            border-radius: 90px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        .submit-button {
+            display: flex;
+            padding-left: 35px;
+            font-size: 20px;
+            background-color: #e04d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: auto;
+            width: 200px;
+            height: 50px;
+            font-weight: 700;
+            font-family: system-ui;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+        }
+
+        h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+            table td {
+                padding: 8px;
+                border: 1px solid #ccc;
+            }
+
+            table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            h1{
+                text-align:center;
+            }
+    </style>
+}
+<h1> Thông tin cá nhân </h1>
+<div class="info">
+    <form action="~/TaiKhoan/UpdateTks" method="post" enctype="multipart/form-data" class="add-form">
+        <div class="form-group">
+            <input type="hidden" id="id" name="id" value="@ViewBag.list[0][0]" />
+        </div>
+        <div class="form-group">
+            <label for="tendn">Tên Đăng Nhập:</label>
+            <input type="text" id="tendn" name="tendn" value="@ViewBag.list[0][1]" />
+        </div>
+        <div class="form-group">
+            <label for="matkhau">Mật Khẩu:</label>
+            <input type="text" id="matkhau" name="matkhau" value="@ViewBag.list[0][2]" />
+        </div>
+        <div class="form-group">
+            <label for="tentk">Tên tài khoản:</label>
+            <input type="text" id="tentk" name="tentk" value="@ViewBag.list[0][3]" />
+        </div>
+        <div class="form-group">
+            <label for="sdt">Số điện thoại:</label>
+            <input type="text" id="sdt" name="sdt" value="@ViewBag.list[0][4]" />
+        </div>
+        <input type="submit" value="Sửa thông tin" class="submit-button" />
+    </form>
+</div>
+<h1> Các hóa đơn của tôi </h1>
+@foreach (var a in ViewBag.listhd)
+{
+    <table  style=" border: 3px solid black;
+    max-width: 80%;
+    margin: auto; margin-top:20px;margin-bottom:20px"  class="custom-table">
+        <tr class="table-header">
+            <td>
+                Mã Hóa Đơn
+            </td>
+            <td>
+                Tên người đặt
+            </td>
+            <td>
+                Ngày Đặt
+            </td>
+            <td>
+                Địa chỉ
+            </td>
+            <td>
+                Trạng Thái
+            </td>
+            <td>
+                Tổng Tiền
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @a[0]
+            </td>
+            <td>
+                @{ var idtk = (string)a[1];
+                    string ten= string.Empty;
+
+                        foreach (var ma in ViewBag.list)
+                        {
+                            if ((string)ma[0] == idtk)
+                            {
+                                ten = (string)ma[3];
+                                break;
+                            }
+                        }
+                 }
+                    @ten
+            </td>
+            <td>
+                @a[2]
+            </td>
+            <td>
+                @a[3]
+            </td>
+            <td>
+                @a[4]
+            </td>
+            <td>
+                @a[5]
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                Sản phẩm
+            </td>
+            <td  colspan="2">
+                Số lượng
+            </td>
+            <td colspan="2">
+                Số tiền
+            </td>
+        </tr>
+        @foreach (var b in ViewBag.listcthd)
+        {
+
+            var mahd = (string)a[0];
+            var idma = (string)b[2];
+            var tenma = string.Empty;
+
+            if (mahd == a[0])
+            {
+                foreach (var ma in ViewBag.listma)
+                {
+                    if ((string)ma[0] == idma)
+                    {
+                        tenma = (string)ma[1];
+                        break;
+                    }
+                }
+            }
+
+            <tr>
+                <td colspan="2">
+                    @tenma
+                </td>
+                <td colspan="2">
+                    x @b[3]
+                </td>
+                <td colspan="2">
+                    @b[4] vnđ
+                </td>
+            </tr>
+
+        }
+    </table>
+
+}

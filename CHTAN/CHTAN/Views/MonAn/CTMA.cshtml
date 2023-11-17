@@ -42,6 +42,21 @@
             }
 
         }
+    </select><br/>
+    Khuyến Mãi :
+    <select name="km">
+        @foreach (var b in ViewBag.listkm)
+        {
+            if (b[0] == ViewBag.list[0][7])
+            {
+                <option value="@b[0]" selected>@b[1]</option>
+            }
+            else
+            {
+                <option value="@b[0]">@b[1]</option>
+            }
+
+        }
     </select>
     <input type="submit" value="Sửa món ăn" />
 </form>

@@ -2,14 +2,144 @@
 @{
     ViewBag.Title = "Admin";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #333;
+            text-align:center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+            table td {
+                padding: 8px;
+                border: 1px solid #ccc;
+            }
+
+            table tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+
+        #barChart {
+            margin-top: 20px;
+            max-width: 95%;
+            margin-left: auto;
+            max-height: 90%;
+            margin-right: auto;
+            width: 900px;
+            height: 450px;
+        }
+    </style>
 }
 
 <h2>Admin</h2>
 <body>
     @{
-        System.Collections.ArrayList a = ((System.Collections.ArrayList)Session["taikhoan"]);
+        System.Collections.ArrayList b = ((System.Collections.ArrayList)Session["taikhoan"]);
     }
-    <h1>Xin chào @a[1]</h1>
+    <h1>Xin chào @b[1]</h1>
 
+    <table>
+        <tr>
+            <td>Tên món ăn :</td>
+            <td>Số lượng đã bán ra :</td>
+            <td>Tổng tiền đã thu được :</td>
+        </tr>
+        @foreach (var a in ViewBag.listcthd)
+        {
+            <tr>
+                <td>
+                    @{
+                        var idma = a[0];
+                        var tenma = string.Empty;
+                        foreach (var ma in ViewBag.listma)
+                        {
+                            if ((string)ma[0] == idma)
+                            {
+                                tenma = (string)ma[1];
+                                break;
+                            }
+                        }
+                    }
+                    @tenma
+                </td>
+                <td>@a[1]</td>
+                <td>
+                    @{
+                        decimal tien = 0;
+                        foreach (var ma in ViewBag.listma)
+                        {
+                            if ((string)ma[0] == idma)
+                            {
+                                tien = Convert.ToDecimal(ma[3]);
+                                break;
+                            }
+                        }
+                        decimal tongtien = tien * Convert.ToDecimal(a[1]);
+                    }
+                    @tongtien
+                </td>
+
+
+
+            </tr>
+
+        }
+    </table>
+    <p>Bảng thống kê</p>
+    <canvas id="barChart"></canvas>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Lấy dữ liệu từ bảng
+        var data = [];
+        var labels = [];
+        var tableRows = document.querySelectorAll("table tr");
+        for (var i = 1; i < tableRows.length; i++) {
+            var cells = tableRows[i].querySelectorAll("td");
+            var tenMonAn = cells[0].innerText;
+            var tongTien = parseFloat(cells[2].innerText);
+            labels.push(tenMonAn);
+            data.push(tongTien);
+        }
 
+        // Tạo biểu đồ cột
+        var ctx = document.getElementById("barChart").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Doanh thu",
+                    data: data,
+                    backgroundColor: "rgba(75, 192, 192, 0.2)",
+                    borderColor: "rgba(75, 192, 192, 1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return value.toLocaleString() + " đ"; // Định dạng số tiền
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>

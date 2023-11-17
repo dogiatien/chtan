@@ -30,6 +30,7 @@
             <td>Hình ảnh</td>
             <td>Loại</td>
             <td>Nguyên liệu</td>
+            <td>Khuyến Mãi</td>
             <td>Thao tác</td>
         </tr>
         @foreach (var a in ViewBag.list)
@@ -70,6 +71,21 @@
                     }
                     @tennl
                 </td>
+                <td>
+                    @{
+                        var idkm = (string)a[7];
+                        var giamgia = string.Empty;
+                        foreach (var nl in ViewBag.listkm)
+                        {
+                            if ((string)nl[0] == idkm)
+                            {
+                                giamgia = (string)nl[1];
+                                break;
+                            }
+                        }
+                    }
+                    @giamgia
+                </td>
                 <td class="table-actions">
                     <a href="/MonAn/XoaMA?id=@a[0]">Xóa</a>
                     <a href="/MonAN/CTMA?id=@a[0]">Sửa</a>
@@ -99,6 +115,7 @@
                 <option value="@b[0]">@b[1]</option>
             }
         </select><br />
+
         <input type="submit" value="Thêm món ăn" />
     </form>
     <script>
